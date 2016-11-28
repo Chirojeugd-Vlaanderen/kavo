@@ -2,6 +2,11 @@
 
 CiviCRM extension to link CiviCRM to the 'Kadervormingstool' of the Flemish government.
 
+## prerequisites
+
+You need to enable [org.civicoop.configitems](https://github.com/CiviCooP/org.civicoop.configitems). At the moment
+of this writing (2016-11-28), use the master version from git.
+
 ## configuration
 
 Add these two lines to your `civicrm.config.php` file:
