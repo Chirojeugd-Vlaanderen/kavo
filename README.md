@@ -23,3 +23,11 @@ Add these two lines to your `civicrm.config.php` file:
 
 Of course, you use your own key and secret. And change the endpoint if you want to connect to the real KAVO tool
 instead of the test.
+
+## api examples
+
+Generate a KAVO-ID for contact with given contact ID
+
+    drush cvapi Kavo.createaccount contact_id=204
+
+If a kavo-ID already exists for the e-mail address of the given contact, an unclear exception is thrown.
