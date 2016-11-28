@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<extension key="be.chiro.civi.kavo" type="module">
+  <file>kavo</file>
+  <name>Kavo</name>
+  <description>Support for the KAVO-API</description>
+  <license>AGPL-3.0</license>
+  <maintainer>
+    <author>Chirojeugd-Vlaanderen vzw</author>
+    <email>helpdesk@chiro.be</email>
+  </maintainer>
+  <urls>
+    <url desc="Main Extension Page">https://www.github.com/Chirojeugd-Vlaanderen/kavo</url>
+    <url desc="Documentation">https://www.github.com/Chirojeugd-Vlaanderen/kavo</url>
+    <url desc="Support">https://www.github.com/Chirojeugd-Vlaanderen/kavo</url>
+    <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
+  </urls>
+  <releaseDate>2016-11-28</releaseDate>
+  <version>0.1</version>
+  <develStage>alpha</develStage>
+  <compatibility>
+    <ver>4.7</ver>
+  </compatibility>
+  <comments>Koppeling van CiviCRM met de Kadervormingstool van de Vlaamse overheid.</comments>
+  <civix>
+    <namespace>CRM/Kavo</namespace>
+  </civix>
+</extension>
