@@ -35,7 +35,18 @@ interface CRM_Kavo_KavoInterface {
    *
    * See https://cjsm.be/kavotest/docs/#api-Authenticate-Hello
    *
-   * @return mixed
+   * @return string
    */
   public function hello();
+
+  /**
+   * After account creation, an email is sent to the user for account confirmation (only when using API in production).
+   *
+   * It is important to save the kavo_id for this user. This kavo_id will be needed for all further communications.
+   * See https://cjsm.be/kavotest/docs/#api-User-CreateUser
+   *
+   * @param array $contact
+   * @return string KAVO-ID
+   */
+  public function createAccount(array $contact);
 }

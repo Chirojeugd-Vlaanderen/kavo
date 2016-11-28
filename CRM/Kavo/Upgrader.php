@@ -35,11 +35,10 @@ class CRM_Kavo_Upgrader extends CRM_Kavo_Upgrader_Base {
       // there should be a better way to do this.
       'path' => realpath(__DIR__ . '/../../') . '/resources/'
     ]);
-    if ($configResult['is_error']) {
-      // If you get an error 'API (Civiconfig, load_json) does not exist (join the API team and implement it!)',
-      // you need to install the org.civicoop.configitems extension.
-      throw new Exception($configResult['error_message']);
-    }
+    // If you get an error below
+    // 'API (Civiconfig, load_json) does not exist (join the API team and implement it!)',
+    // you need to install the org.civicoop.configitems extension.
+    CRM_Kavo_Assert::validCiviApiResult($configResult);
     return TRUE;
   }
 

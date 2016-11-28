@@ -26,11 +26,17 @@
  * @see http://wiki.civicrm.org/confluence/display/CRMDOC/API+Architecture+Standards
  */
 function _civicrm_api3_kavo_Createaccount_spec(&$spec) {
-  $spec['contact_id']['api.required'] = 1;
+  $spec['contact_id'] = [
+    'type' => CRM_Utils_Type::T_INT,
+    'api.required' => 1
+  ];
 }
 
 /**
- * Kavo.Createaccount API
+ * Kavo.Createaccount API.
+ *
+ * Creates a KAVO account for the CiviCRM contact with id $params['contact_id'],
+ * and saves the new KAVO-ID to the appropriate custom field.
  *
  * @param array $params
  * @return array API result descriptor
@@ -39,19 +45,22 @@ function _civicrm_api3_kavo_Createaccount_spec(&$spec) {
  * @throws API_Exception
  */
 function civicrm_api3_kavo_Createaccount($params) {
-  if (array_key_exists('magicword', $params) && $params['magicword'] == 'sesame') {
-    $returnValues = array( // OK, return several data rows
-      12 => array('id' => 12, 'name' => 'Twelve'),
-      34 => array('id' => 34, 'name' => 'Thirty four'),
-      56 => array('id' => 56, 'name' => 'Fifty six'),
-    );
-    // ALTERNATIVE: $returnValues = array(); // OK, success
-    // ALTERNATIVE: $returnValues = array("Some value"); // OK, return a single value
+  $requiredKeys = ['last_name', 'first_name', 'birth_date', 'email'];
+  $contact = civicrm_api3('Contact', 'getsingle', [
+    'id' => $params['contact_id'],
+    'return' => $requiredKeys,
+  ]);
+  // TODO: get old_certificate and old_certificate_number via hook.
 
-    // Spec: civicrm_api3_create_success($values = 1, $params = array(), $entity = NULL, $action = NULL)
-    return civicrm_api3_create_success($returnValues, $params, 'NewEntity', 'NewAction');
-  } else {
-    throw new API_Exception(/*errorMessage*/ 'Everyone knows that the magicword is "sesame"', /*errorCode*/ 1234);
-  }
+  // TODO: inject CRM_Kavo_KavoInterface.
+  $kavo = new CRM_Kavo_KavoTool();
+  $kavoId = $kavo->createAccount(CRM_Kavo_Assert::arrayKeysNotEmpty($requiredKeys, $contact));
+
+  $saveResult = civicrm_api3('Contact', 'create', [
+    'id' => $contact['id'],
+    KAVO_FIELD_KAVO_ID => $kavoId,
+  ]);
+
+  return CRM_Kavo_Assert::validCiviApiResult($saveResult);
 }
 

@@ -17,6 +17,8 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+require_once 'kavo.defines.php';
+
 /**
  * Access to the kavo tool, based on the CiviCRM settings.
  */
@@ -101,8 +103,24 @@ class CRM_Kavo_KavoTool implements CRM_Kavo_KavoInterface {
     return $result->token;
   }
 
+  /**
+   * Test whether the token is valid.
+   *
+   * @return string The hello-message of the service if successful.
+   */
   public function hello() {
     $result = $this->callApi('hello', [], $this->getToken(), 'GET');
     return $result->message;
+  }
+
+  /**
+   * Create account and return KAVO-ID for contact.
+   *
+   * @param array $contact
+   * @return string KAVO-ID
+   */
+  public function createAccount(array $contact) {
+    $result = $this->callApi('account', $contact, $this->getToken(), 'POST');
+    return $result->data->kavo_id;
   }
 }

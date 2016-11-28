@@ -4,8 +4,13 @@ CiviCRM extension to link CiviCRM to the 'Kadervormingstool' of the Flemish gove
 
 ## prerequisites
 
-You need to enable [org.civicoop.configitems](https://github.com/CiviCooP/org.civicoop.configitems). At the moment
-of this writing (2016-11-28), use the master version from git.
+This extension depends on two other CiviCRM extensions:
+
+* [org.civicoop.configitems](https://github.com/CiviCooP/org.civicoop.configitems). At the moment
+of this writing (2016-11-28), you need the version from git.
+* [be.chiro.civi.idcache](https://github.com/Chirojeugd-Vlaanderen/idcache)
+
+So install those before you install the kavo extension.
 
 ## configuration
 
