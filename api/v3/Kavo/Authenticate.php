@@ -29,8 +29,8 @@
 function civicrm_api3_kavo_Authenticate($params) {
   // TODO: find out how to properly inject a CRM_Kavo_KavoInterface.
   $kavo = new CRM_Kavo_KavoTool();
-  $kavo->Authenticate();
+  $kavo->authenticate();
   // If the above throws an exception, the API will handle it.
-  return civicrm_api3_create_success(TRUE, 'Johan', 'test');
+  return civicrm_api3_create_success(TRUE, 'Kavo', 'authenticate');
 }
 

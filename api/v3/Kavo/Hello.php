@@ -18,24 +18,18 @@
  */
 
 /**
- * Interface for the KAVO-API.
+ * Kavo.Hello API
+ *
+ * @param array $params
+ * @return array API result descriptor
+ * @see civicrm_api3_create_success
+ * @see civicrm_api3_create_error
+ * @throws API_Exception
  */
-interface CRM_Kavo_KavoInterface {
-  /**
-   * Authenticate using key / secret to obtain the JWT Token.
-   *
-   * See https://cjsm.be/kavotest/docs/#api-Authenticate-Authenticate
-   *
-   * @return array
-   */
-  public function authenticate();
-
-  /**
-   * This is an example endpoint to test the token retrieved from the API.
-   *
-   * See https://cjsm.be/kavotest/docs/#api-Authenticate-Hello
-   *
-   * @return mixed
-   */
-  public function hello();
+function civicrm_api3_kavo_Hello($params) {
+  // TODO: Inject a CRM_Kavo_KavoInterface in some way.
+  $kavo = new CRM_Kavo_KavoTool();
+  $result = $kavo->hello();
+  return civicrm_api3_create_success($result, 'Kavo', 'hello');
 }
+

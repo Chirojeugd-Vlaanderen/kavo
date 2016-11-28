@@ -26,11 +26,13 @@ class CRM_Kavo_KavoTool implements CRM_Kavo_KavoInterface {
    *
    * @param string $resource
    * @param array $bodyParams
+   * @param string $token
    * @param string $verb
    * @return array
    * @throws Exception
    */
-  protected function CallApi($resource, array $bodyParams, $verb = 'POST') {
+  protected function callApi($resource, array $bodyParams, $token = NULL, $verb = 'POST') {
+    // FIXME: This looks rather messy.
     $endpoint = CRM_Core_BAO_Setting::getItem('kavo', 'kavo_endpoint');
     if (empty($endpoint)) {
       throw new Exception('KAVO endpoint not configured.');
@@ -38,6 +40,10 @@ class CRM_Kavo_KavoTool implements CRM_Kavo_KavoInterface {
     $endpoint .= "/${resource}";
     $curl = curl_init();
     $opts = [];
+    // $opts[CURLOPT_HTTPHEADER][] = 'Content-type: application/json';
+    if (isset($token)) {
+      $opts[CURLOPT_HTTPHEADER][] = "Authorization: Bearer ${token}";
+    }
     switch ($verb) {
       case 'GET':
         $opts[CURLOPT_URL] = $endpoint . '?' . http_build_query($bodyParams);
@@ -63,11 +69,28 @@ class CRM_Kavo_KavoTool implements CRM_Kavo_KavoInterface {
     return $result;
   }
 
-  public function Authenticate() {
-    $result = $this->CallApi('authenticate', [
+  /**
+   * Returns the API token. Requests a new one if the known one has expired.
+   */
+  protected function getToken() {
+    if (CRM_Core_BAO_Setting::getItem('kavo', 'kavo_token_expiration') < new DateTime()) {
+      return $this->authenticate();
+    }
+    else {
+      return CRM_Core_BAO_Setting::getItem('kavo', 'kavo_token');
+    }
+  }
+
+  /**
+   * Requests a new authentication token.
+   *
+   * @return string The token.
+   */
+  public function authenticate() {
+    $result = $this->callApi('authenticate', [
       'key' => CRM_Core_BAO_Setting::getItem('kavo', 'kavo_key'),
       'secret' => CRM_Core_BAO_Setting::getItem('kavo', 'kavo_secret'),
-    ]);
+    ], NULL);
     // Store token and expiration date in variable
     // FIXME: This is rather arbitrary:
     $expiresIn = $result->expires_in * 0.9;
@@ -75,5 +98,11 @@ class CRM_Kavo_KavoTool implements CRM_Kavo_KavoInterface {
     $expirationDate->add(new DateInterval("PT${expiresIn}S"));
     CRM_Core_BAO_Setting::setItem($expirationDate, 'kavo', 'kavo_token_expiration');
     CRM_Core_BAO_Setting::setItem($result->token, 'kavo', 'kavo_token');
+    return $result->token;
+  }
+
+  public function hello() {
+    $result = $this->callApi('hello', [], $this->getToken(), 'GET');
+    return $result->message;
   }
 }
