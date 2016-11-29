@@ -151,6 +151,21 @@ function kavo_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
 }
 
 /**
+ * Implements hook_civicrm_summaryActions.
+ *
+ * @param $actions
+ * @param $contactID
+ */
+function kavo_civicrm_summaryActions(&$actions, $contactID) {
+  $actions['generate_kavo_id'] = [
+    'title' => 'Generate KAVO-ID',
+    'ref' => 'generate_kavo_id',
+    'key' => 'kavo_id',
+    'href' => CRM_Utils_System::url("/kavo/controller", "action=new_id"),
+  ];
+}
+
+/**
  * Functions below this ship commented out. Uncomment as required.
  *
 
