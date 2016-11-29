@@ -3,21 +3,30 @@
 require_once 'CRM/Core/Form.php';
 
 /**
- * Form controller class
+ * Form controller class.
  *
  * @see http://wiki.civicrm.org/confluence/display/CRMDOC43/QuickForm+Reference
  */
 class CRM_Kavo_Form_Controller extends CRM_Core_Form {
   public function buildQuickForm() {
+    $contactId = CRM_Utils_Request::retrieve('cid', 'Integer');
+    $action = CRM_Utils_Request::retrieve('action', 'String');
+    if ($action != 'new_id') {
+      throw new Exception("Unexpected action: ${action}.");
+    }
 
-    // add form elements
-    $this->add(
-      'select', // field type
-      'favorite_color', // field name
-      'Favorite Color', // field label
-      $this->getColorOptions(), // list of options
-      TRUE // is required
-    );
+    try {
+      $result = civicrm_api3('Kavo', 'createaccount', ['contact_id' => $contactId]);
+      $contact = CRM_Utils_Array::first($result['values']);
+      $this->assign('kavoId', $contact[KAVO_FIELD_KAVO_ID]);
+      $this->assign('code', 0);
+    }
+    catch (CiviCRM_API3_Exception $ex) {
+      $extraParams = $ex->getExtraParams();
+      $this->assign('code', $extraParams['error_code']);
+      $this->assign('missing', $extraParams['missing']);
+    }
+
     $this->addButtons(array(
       array(
         'type' => 'done',
@@ -32,26 +41,7 @@ class CRM_Kavo_Form_Controller extends CRM_Core_Form {
   }
 
   public function postProcess() {
-    $values = $this->exportValues();
-    $options = $this->getColorOptions();
-    CRM_Core_Session::setStatus(ts('You picked color "%1"', array(
-      1 => $options[$values['favorite_color']]
-    )));
     parent::postProcess();
-  }
-
-  public function getColorOptions() {
-    $options = array(
-      '' => ts('- select -'),
-      '#f00' => ts('Red'),
-      '#0f0' => ts('Green'),
-      '#00f' => ts('Blue'),
-      '#f0f' => ts('Purple'),
-    );
-    foreach (array('1','2','3','4','5','6','7','8','9','a','b','c','d','e') as $f) {
-      $options["#{$f}{$f}{$f}"] = ts('Grey (%1)', array(1 => $f));
-    }
-    return $options;
   }
 
   /**

@@ -45,8 +45,6 @@ function _civicrm_api3_kavo_Createaccount_spec(&$spec) {
  * @throws API_Exception
  */
 function civicrm_api3_kavo_Createaccount($params) {
-  $requiredKeys = CRM_Kavo_ContactWorker::kavoRequiredKeys();
-
   $contact = CRM_Kavo_ContactWorker::get($params['contact_id']);
   $validationResult = CRM_Kavo_ContactWorker::canCreateAccount($contact);
   if ($validationResult->status != KAVO_ERROR_OK) {
@@ -60,10 +58,15 @@ function civicrm_api3_kavo_Createaccount($params) {
   $kavo = new CRM_Kavo_KavoTool();
   $kavoId = $kavo->createAccount($contact);
 
+  // TODO: support sequential => 1
   $saveResult = civicrm_api3('Contact', 'create', [
     'id' => $contact['id'],
     KAVO_FIELD_KAVO_ID => $kavoId,
   ]);
+
+  // You would think that the result of this civicrm API call would include the
+  // kavo id. Not. So let's hack it in.
+  $saveResult['values'][$params['contact_id']][KAVO_FIELD_KAVO_ID] = $kavoId;
 
   return CRM_Kavo_Check::assertValidApiResult($saveResult);
 }

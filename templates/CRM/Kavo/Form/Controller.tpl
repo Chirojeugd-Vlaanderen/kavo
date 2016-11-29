@@ -4,22 +4,32 @@
 {include file="CRM/common/formButtons.tpl" location="top"}
 </div>
 
-{* FIELD EXAMPLE: OPTION 1 (AUTOMATIC LAYOUT) *}
+{* CONTENT FWIW *}
 
-{foreach from=$elementNames item=elementName}
-  <div class="crm-section">
-    <div class="label">{$form.$elementName.label}</div>
-    <div class="content">{$form.$elementName.html}</div>
-    <div class="clear"></div>
-  </div>
-{/foreach}
-
-{* FIELD EXAMPLE: OPTION 2 (MANUAL LAYOUT)
-
-  <div>
-    <span>{$form.favorite_color.label}</span>
-    <span>{$form.favorite_color.html}</span>
-  </div>
+<div>
+{if $code eq 0}
+    <p>
+        {ts 1=$kavoId}Assigned KAVO-ID %1.{/ts}
+    </p>
+    <p>
+        {ts}You will need to refresh the page after clicking 'OK'.{/ts}
+        {ts}(because I don't know how to update the KAVO-ID automatically.){/ts}
+    </p>
+{else}
+    <p>
+        {* TODO: split error code into distinct errors, because smarty cannot do bitwise operations. *}
+        {ts}Some problems have occurred, error code {$code}.{/ts}
+    </p>
+    {if $missing ne ''}
+        <p>{ts}Required fields are missing:{/ts}</p>
+        <ul>
+            {foreach from=$missing item=fieldName}
+                <li>{ts}{$fieldName}{/ts}</li>
+            {/foreach}
+        </ul>
+    {/if}
+{/if}
+</div>
 
 {* FOOTER *}
 <div class="crm-submit-buttons">
