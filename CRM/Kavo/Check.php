@@ -20,29 +20,49 @@
 /**
  * Some stupid checks.
  */
-class CRM_Kavo_Assert {
+class CRM_Kavo_Check {
+  /**
+   * Returns all keys of $keys for which $array has an empty value.
+   *
+   * @param array $keys
+   * @param array $array
+   * @return array
+   */
+  public static function getMissingValues(array $keys, array $array) {
+    $missingValues = [];
+    foreach ($keys as $key) {
+      if (empty($array[$key])) {
+        $missingValues[] = $key;
+      }
+    }
+    return $missingValues;
+  }
+
   /**
    * Checks whether the array contains a non-empty value for all keys specified.
+   * Throws an exception if that's not the case.
    *
    * @param array $keys Keys to check
    * @param array $array Some array
    * @return array The original array
    * @throws Exception if not all given keys are non-empty.
    */
-  public static function arrayKeysNotEmpty(array $keys, array $array) {
-    $problems = [];
-    foreach ($keys as $key) {
-      if (empty($array[$key])) {
-        $problems[] = $key;
-      }
-    }
+  public static function assertArrayKeysNotEmpty(array $keys, array $array) {
+    $problems = self::getMissingValues($keys, $array);
     if (count($problems) == 0) {
       return $array;
     }
-    throw new Exception('Values missing: ' . explode(', ', $problems));
+    throw new Exception('Values missing: ' . implode(', ', $problems));
   }
 
-  public static function validCiviApiResult(array $apiResult) {
+  /**
+   * Throws an exception if the given CiviCRM $apiResult is an error.
+   *
+   * @param array $apiResult
+   * @return array the same $apiResult
+   * @throws Exception
+   */
+  public static function assertValidApiResult(array $apiResult) {
     if ($apiResult['is_error'] == 0) {
       return $apiResult;
     }

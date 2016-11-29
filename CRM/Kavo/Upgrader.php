@@ -38,7 +38,7 @@ class CRM_Kavo_Upgrader extends CRM_Kavo_Upgrader_Base {
     // If you get an error below
     // 'API (Civiconfig, load_json) does not exist (join the API team and implement it!)',
     // you need to install the org.civicoop.configitems extension.
-    CRM_Kavo_Assert::validCiviApiResult($configResult);
+    CRM_Kavo_Check::assertValidApiResult($configResult);
     return TRUE;
   }
 

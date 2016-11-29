@@ -17,11 +17,29 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-define('KAVO_ERROR_OK' ,0);
-define('KAVO_ERROR_REQUIRED_FIELDS_MISSING', 1);
-define('KAVO_ERROR_WRONG_CONTACT_TYPE', 2);
-define('KAVO_ERROR_KAVO_ID_NOT_EMPTY', 4);
+class CRM_Kavo_ValidationResult {
+  /**
+   * CRM_Kavo_ValidationResult constructor.
+   * @param int $status
+   * @param string $message
+   * @param array $extra
+   */
+  public function __construct($status, $message, array $extra) {
+    $this->status = $status;
+    $this->message = $message;
+    $this->extra = $extra;
+  }
 
-// If CRM_IdCache_Cache_CustomField is not found, you need to install
-// the be.chiro.civi.idcache extension.
-define('KAVO_FIELD_KAVO_ID', CRM_IdCache_Cache_CustomField::getApiField('individual_kavo_fields', 'kavo_id'));
+  /**
+   * @var int Error code. 0 if everything is ok.
+   */
+  public $status;
+  /**
+   * @var string Human readable error message.
+   */
+  public $message;
+  /**
+   * @var (optional) additional info.
+   */
+  public $extra;
+}

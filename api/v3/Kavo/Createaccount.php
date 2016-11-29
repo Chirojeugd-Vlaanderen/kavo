@@ -45,22 +45,26 @@ function _civicrm_api3_kavo_Createaccount_spec(&$spec) {
  * @throws API_Exception
  */
 function civicrm_api3_kavo_Createaccount($params) {
-  $requiredKeys = ['last_name', 'first_name', 'birth_date', 'email'];
-  $contact = civicrm_api3('Contact', 'getsingle', [
-    'id' => $params['contact_id'],
-    'return' => $requiredKeys,
-  ]);
-  // TODO: get old_certificate and old_certificate_number via hook.
+  $requiredKeys = CRM_Kavo_ContactWorker::kavoRequiredKeys();
+
+  $contact = CRM_Kavo_ContactWorker::get($params['contact_id']);
+  $validationResult = CRM_Kavo_ContactWorker::canCreateAccount($contact);
+  if ($validationResult->status != KAVO_ERROR_OK) {
+    throw new API_Exception($validationResult->message, $validationResult->status, [
+      'missing' => $validationResult->extra
+    ]);
+  }
+  // TODO: maybe create a add hook to get old_certificate and old_certificate_number.
 
   // TODO: inject CRM_Kavo_KavoInterface.
   $kavo = new CRM_Kavo_KavoTool();
-  $kavoId = $kavo->createAccount(CRM_Kavo_Assert::arrayKeysNotEmpty($requiredKeys, $contact));
+  $kavoId = $kavo->createAccount($contact);
 
   $saveResult = civicrm_api3('Contact', 'create', [
     'id' => $contact['id'],
     KAVO_FIELD_KAVO_ID => $kavoId,
   ]);
 
-  return CRM_Kavo_Assert::validCiviApiResult($saveResult);
+  return CRM_Kavo_Check::assertValidApiResult($saveResult);
 }
 
