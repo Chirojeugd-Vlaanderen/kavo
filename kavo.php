@@ -161,7 +161,8 @@ function kavo_civicrm_summaryActions(&$actions, $contactID) {
     'title' => 'Generate KAVO-ID',
     'ref' => 'generate_kavo_id',
     'key' => 'kavo_id',
-    'href' => CRM_Utils_System::url("/kavo/controller", "action=new_id"),
+    'weight' => 0,
+    'href' => CRM_Utils_System::url("/civicrm/kavo/controller", "action=new_id"),
   ];
 }
 
