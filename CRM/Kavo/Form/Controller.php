@@ -32,11 +32,12 @@ class CRM_Kavo_Form_Controller extends CRM_Core_Form {
       $result = civicrm_api3('Kavo', 'createaccount', ['contact_id' => $contactId]);
       $contact = CRM_Utils_Array::first($result['values']);
       $this->assign('kavoId', $contact[KAVO_FIELD_KAVO_ID]);
-      $this->assign('code', 0);
+      $this->assign('codes', []);
     }
     catch (CiviCRM_API3_Exception $ex) {
       $extraParams = $ex->getExtraParams();
-      $this->assign('code', $extraParams['error_code']);
+      $codes = $this->getIndividualErrorCodes($extraParams['error_code']);
+      $this->assign('codes', $codes);
       $this->assign('missing', $extraParams['missing']);
     }
 
@@ -51,6 +52,29 @@ class CRM_Kavo_Form_Controller extends CRM_Core_Form {
     // export form elements
     $this->assign('elementNames', $this->getRenderableElementNames());
     parent::buildQuickForm();
+  }
+
+  /**
+   * Extract the bits from an error code in an exception of Kavo.createaccount.
+   *
+   * The error code returned in exceptions of Kavo.createaccount is a bitwise or of individual error codes.
+   * Because smarty does not seem to support bitwise and (??), I wrote this function to extract the individual
+   * bits.
+   *
+   * @param int $code
+   * @return array
+   */
+  private function getIndividualErrorCodes($code) {
+    $result = [];
+    $current = 1;
+    while ($code) {
+      if ($code & 1) {
+        $result[] = $current;
+      }
+      $code >>= 1;
+      $current <<= 1;
+    }
+    return $result;
   }
 
   public function postProcess() {

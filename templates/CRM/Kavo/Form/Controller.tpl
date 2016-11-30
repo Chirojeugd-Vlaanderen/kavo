@@ -7,7 +7,7 @@
 {* CONTENT FWIW *}
 
 <div>
-{if $code eq 0}
+{if $codes eq ''}
     <p>
         {ts 1=$kavoId}Assigned KAVO-ID %1.{/ts}
     </p>
@@ -20,8 +20,30 @@
         {* TODO: split error code into distinct errors, because smarty cannot do bitwise operations. *}
         {ts}Some problems have occurred, error code {$code}.{/ts}
     </p>
+    <ul>
+        {foreach from=$codes item=code}
+            <li>
+                {* I wonder whether I could use the constants from kavo.defines.php in this template *}
+                {if $code == 1}
+                    {ts}Some required contact fields are missing.{/ts}
+                {/if}
+                {if $code == 2}
+                    {ts}Only individuals can get a KAVO account.{/ts}
+                {/if}
+                {if $code == 4}
+                    {ts}This contact already has a KAVO-ID.{/ts}
+                {/if}
+                {if $code == 8}
+                    {ts}A KAVO-ID already exists for this email address.{/ts}
+                {/if}
+                {if $code == 128}
+                    {ts}The KAVO API returned an unexpected result.{/ts}
+                {/if}
+            </li>
+        {/foreach}
+    </ul>
     {if $missing ne ''}
-        <p>{ts}Required fields are missing:{/ts}</p>
+        <p>{ts}Missing fields:{/ts}</p>
         <ul>
             {foreach from=$missing item=fieldName}
                 <li>{ts}{$fieldName}{/ts}</li>
