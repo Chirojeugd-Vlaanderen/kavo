@@ -40,6 +40,12 @@ class CRM_Kavo_Form_Controller extends CRM_Core_Form {
    */
   public function preProcess() {
     parent::preProcess();
+    if (!empty($this->_submitValues)) {
+      // preProcess seems to be called when the form is submitted as well.
+      // In that case we don't have to call the KAVO-API again, because all the work was already done when the
+      // form was shown in the first place.
+      return;
+    }
     $contactId = CRM_Utils_Request::retrieve('cid', 'Integer');
     $action = CRM_Utils_Request::retrieve('action', 'String');
     if ($action == 'new_id') {
