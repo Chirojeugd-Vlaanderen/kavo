@@ -17,17 +17,45 @@ require_once 'CRM/Core/Form.php';
  */
 class CRM_Kavo_Form_Controller extends CRM_Core_Form {
   public function buildQuickForm() {
+    $this->addButtons(array(
+      array(
+        'type' => 'done',
+        'name' => ts('OK'),
+        'isDefault' => TRUE,
+      ),
+    ));
+
+    // export form elements
+    $this->assign('elementNames', $this->getRenderableElementNames());
+    parent::buildQuickForm();
+  }
+
+  /**
+   * Executes the requested action.
+   *
+   * The idea is to use this form for multiple smaller actions for the KAVO extension. Not sure whether this is
+   * a good idea.
+   *
+   * @throws Exception
+   */
+  public function preProcess() {
+    parent::preProcess();
     $contactId = CRM_Utils_Request::retrieve('cid', 'Integer');
     $action = CRM_Utils_Request::retrieve('action', 'String');
-    if ($action != 'new_id') {
+    if ($action == 'new_id') {
+      $this->newId($contactId);
+    }
+    else {
       throw new Exception("Unexpected action: ${action}.");
     }
+  }
 
-    // FIXME: This should not be done in buildQuickForm, because buildQuickForm is
-    // also called after submitting. (It is not that much of a problem, because
-    // calling createaccount twice does not cause any troubles. It wil probably
-    // just throw an exception, the exception will be caught, and no output will
-    // be shown.)
+  /**
+   * Create a KAVO-ID for the contact with given $contactId, and prepare the view model.
+   *
+   * @param $contactId
+   */
+  private function newId($contactId) {
     try {
       $result = civicrm_api3('Kavo', 'createaccount', ['contact_id' => $contactId]);
       $contact = CRM_Utils_Array::first($result['values']);
@@ -40,18 +68,6 @@ class CRM_Kavo_Form_Controller extends CRM_Core_Form {
       $this->assign('codes', $codes);
       $this->assign('missing', $extraParams['missing']);
     }
-
-    $this->addButtons(array(
-      array(
-        'type' => 'done',
-        'name' => ts('Submit'),
-        'isDefault' => TRUE,
-      ),
-    ));
-
-    // export form elements
-    $this->assign('elementNames', $this->getRenderableElementNames());
-    parent::buildQuickForm();
   }
 
   /**
