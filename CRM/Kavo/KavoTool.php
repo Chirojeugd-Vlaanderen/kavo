@@ -62,10 +62,13 @@ class CRM_Kavo_KavoTool implements CRM_Kavo_KavoInterface {
     $opts[CURLOPT_RETURNTRANSFER] = TRUE;
     curl_setopt_array($curl, $opts);
     $result = json_decode(curl_exec($curl));
-    // TODO: improve error handling.
+    // TODO: Should I use a more specific exception type?
     $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
     if ($httpCode >= 400) {
-      throw new Exception(isset($result->error) ? $result->error: "HTTP status code $httpCode.", $httpCode);
+      if ($httpCode == 411 && isset($result->errors->email)) {
+        throw new Exception($result->error->email, KAVO_ERROR_EMAIL_TAKEN);
+      }
+      throw new Exception("HTTP status code $httpCode.", KAVO_ERROR_UNKNOWN);
     }
     curl_close($curl);
     return $result;

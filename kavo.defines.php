@@ -21,6 +21,11 @@ define('KAVO_ERROR_OK' ,0);
 define('KAVO_ERROR_REQUIRED_FIELDS_MISSING', 1);
 define('KAVO_ERROR_WRONG_CONTACT_TYPE', 2);
 define('KAVO_ERROR_KAVO_ID_NOT_EMPTY', 4);
+define('KAVO_ERROR_EMAIL_TAKEN', 8);
+define('KAVO_ERROR_UNKNOWN', 128);
+
+// Hmmm... Wouldn't this be defined already somewhere?
+define('KAVO_HTTP_UNPROCESSABLE_ENTITY', 422);
 
 // If CRM_IdCache_Cache_CustomField is not found, you need to install
 // the be.chiro.civi.idcache extension.

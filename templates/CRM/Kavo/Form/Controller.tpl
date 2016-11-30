@@ -13,7 +13,7 @@
     </p>
     <p>
         {ts}You will need to refresh the page after clicking 'OK'.{/ts}
-        {ts}(because I don't know how to update the KAVO-ID automatically.){/ts}
+        {ts}(because I don't know how to update the view automatically.){/ts}
     </p>
 {else}
     <p>

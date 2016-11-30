@@ -56,7 +56,12 @@ function civicrm_api3_kavo_Createaccount($params) {
 
   // TODO: inject CRM_Kavo_KavoInterface.
   $kavo = new CRM_Kavo_KavoTool();
-  $kavoId = $kavo->createAccount($contact);
+  try {
+    $kavoId = $kavo->createAccount($contact);
+  }
+  catch (Exception $e) {
+    throw new API_Exception($e->getMessage(), $e->getCode());
+  }
 
   // TODO: support sequential => 1
   $saveResult = civicrm_api3('Contact', 'create', [

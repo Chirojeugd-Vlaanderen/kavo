@@ -5,6 +5,14 @@ require_once 'CRM/Core/Form.php';
 /**
  * Form controller class.
  *
+ * This is still a hack. The idea was to use the same form to perform some
+ * actions defined by the extension. Not sure whether that's a good idea.
+ *
+ * Anyway, if we continue like this, the logic that's now in buildQuickForm
+ * should be moved to a dedicated method to build the form for 'new KAVO-id',
+ * and buildQuickForm should decide what to do based on the action parameter in
+ * the HTTP request. The template to be used should depend on the action as well.
+ *
  * @see http://wiki.civicrm.org/confluence/display/CRMDOC43/QuickForm+Reference
  */
 class CRM_Kavo_Form_Controller extends CRM_Core_Form {
@@ -15,6 +23,11 @@ class CRM_Kavo_Form_Controller extends CRM_Core_Form {
       throw new Exception("Unexpected action: ${action}.");
     }
 
+    // FIXME: This should not be done in buildQuickForm, because buildQuickForm is
+    // also called after submitting. (It is not that much of a problem, because
+    // calling createaccount twice does not cause any troubles. It wil probably
+    // just throw an exception, the exception will be caught, and no output will
+    // be shown.)
     try {
       $result = civicrm_api3('Kavo', 'createaccount', ['contact_id' => $contactId]);
       $contact = CRM_Utils_Array::first($result['values']);
