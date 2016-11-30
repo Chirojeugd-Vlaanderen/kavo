@@ -1,6 +1,6 @@
 # be.chiro.civi.kavo
 
-CiviCRM extension to link CiviCRM to the 'Kadervormingstool' of the Flemish government.
+CiviCRM extension to link CiviCRM to the 'Kadervormingstool' of the Flemish government. Work in progress.
 
 ## prerequisites
 
@@ -23,6 +23,11 @@ Add these two lines to your `civicrm.config.php` file:
 
 Of course, you use your own key and secret. And change the endpoint if you want to connect to the real KAVO tool
 instead of the test.
+
+## create a KAVO-ID
+
+On a contact summary page, you can click 'Actions', 'Generate KAVO-ID'. This creates a
+KAVO-account for the contact, and saves the KAVO-ID in the contact's KAVO-ID field.
 
 ## api examples
 
