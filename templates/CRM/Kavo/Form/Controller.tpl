@@ -7,7 +7,7 @@
 {* CONTENT FWIW *}
 
 <div>
-{if $codes eq ''}
+{if count($codes) == 0}
     <p>
         {ts 1=$kavoId}Assigned KAVO-ID %1.{/ts}
     </p>
@@ -18,7 +18,7 @@
 {else}
     <p>
         {* TODO: split error code into distinct errors, because smarty cannot do bitwise operations. *}
-        {ts}Some problems have occurred, error code {$code}.{/ts}
+        {ts}Some problems have occurred.{/ts}
     </p>
     <ul>
         {foreach from=$codes item=code}
@@ -42,7 +42,7 @@
             </li>
         {/foreach}
     </ul>
-    {if $missing ne ''}
+    {if count($missing) != 0}
         <p>{ts}Missing fields:{/ts}</p>
         <ul>
             {foreach from=$missing item=fieldName}
