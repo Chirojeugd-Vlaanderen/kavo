@@ -17,8 +17,6 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once 'kavo.defines.php';
-
 /**
  * Access to the kavo tool, based on the CiviCRM settings.
  */
@@ -65,10 +63,10 @@ class CRM_Kavo_KavoTool implements CRM_Kavo_KavoInterface {
     // TODO: Should I use a more specific exception type?
     $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
     if ($httpCode >= 400) {
-      if ($httpCode == 411 && isset($result->errors->email)) {
-        throw new Exception($result->error->email, KAVO_ERROR_EMAIL_TAKEN);
+      if ($httpCode == KAVO_HTTP_UNPROCESSABLE_ENTITY && isset($result->errors->email)) {
+        throw new Exception($result->error->email, CRM_Kavo_Error::EMAIL_TAKEN);
       }
-      throw new Exception("HTTP status code $httpCode.", KAVO_ERROR_UNKNOWN);
+      throw new Exception("HTTP status code $httpCode.", CRM_Kavo_Error::UNKNOWN);
     }
     curl_close($curl);
     return $result;

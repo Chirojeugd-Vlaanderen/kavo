@@ -17,7 +17,6 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once 'kavo.defines.php';
 /**
  * Some contact related logic.
  */
@@ -41,7 +40,7 @@ class CRM_Kavo_ContactWorker {
   public static function relevantKeys() {
     $result = self::kavoRequiredKeys();
     $result[] = 'contact_type';
-    $result[] = KAVO_FIELD_KAVO_ID;
+    $result[] = CRM_Kavo_Field::KAVO_ID();
     return $result;
   }
 
@@ -71,16 +70,16 @@ class CRM_Kavo_ContactWorker {
     $status = 0;
     $message = '';
     if ($contact['contact_type'] != 'Individual') {
-      $status |= KAVO_ERROR_WRONG_CONTACT_TYPE;
+      $status |= CRM_Kavo_Error::WRONG_CONTACT_TYPE;
       $message .= "Only individuals can get a KAVO-ID.\n";
     }
-    if (!empty($contact[KAVO_FIELD_KAVO_ID])) {
-      $status |= KAVO_ERROR_KAVO_ID_NOT_EMPTY;
+    if (!empty($contact[CRM_Kavo_Field::KAVO_ID()])) {
+      $status |= CRM_Kavo_Error::KAVO_ID_NOT_EMPTY;
       $message .= "Contact already has a KAVO-ID.\n";
     }
     $extra = CRM_Kavo_Check::getMissingValues(self::kavoRequiredKeys(), $contact);
     if (count($extra) > 0) {
-      $status |= KAVO_ERROR_REQUIRED_FIELDS_MISSING;
+      $status |= CRM_Kavo_Error::REQUIRED_FIELDS_MISSING;
       $message .= "Required fields missing: " . implode(', ', $extra) . "\n";
     }
     return new CRM_Kavo_ValidationResult($status, $message, $extra);

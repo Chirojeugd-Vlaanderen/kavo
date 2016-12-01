@@ -17,6 +17,20 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Hmmm... Wouldn't this be defined already somewhere?
-define('KAVO_HTTP_UNPROCESSABLE_ENTITY', 422);
-
+/**
+ * Custom fields created by the kavo extension.
+ *
+ * (One right now, but more to follow, like kavo course ID).
+ * I would love to do this with something like class constants, but you cannot
+ * assign the result of a function call to a const.
+ */
+class CRM_Kavo_Field {
+  /**
+   * Returns the api identifier for the custom field containing the KAVO-ID.
+   * @return string
+   */
+  static function KAVO_ID() {
+    // You need to install the be.chiro.civi.idcache extension for this to work.
+    return CRM_IdCache_Cache_CustomField::getApiField('individual_kavo_fields', 'kavo_id');
+  }
+}

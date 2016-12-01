@@ -65,7 +65,7 @@ class CRM_Kavo_Form_Controller extends CRM_Core_Form {
     try {
       $result = civicrm_api3('Kavo', 'createaccount', ['contact_id' => $contactId]);
       $contact = CRM_Utils_Array::first($result['values']);
-      $this->assign('kavoId', $contact[KAVO_FIELD_KAVO_ID]);
+      $this->assign('kavoId', $contact[CRM_Kavo_Field::KAVO_ID()]);
       $this->assign('codes', []);
     }
     catch (CiviCRM_API3_Exception $ex) {

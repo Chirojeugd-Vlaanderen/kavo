@@ -23,7 +23,7 @@
     <ul>
         {foreach from=$codes item=code}
             <li>
-                {* I wonder whether I could use the constants from kavo.defines.php in this template *}
+                {* I wonder whether I could use the constants from CRM_Kavo_Error in this template *}
                 {if $code == 1}
                     {ts}Some required contact fields are missing.{/ts}
                 {/if}

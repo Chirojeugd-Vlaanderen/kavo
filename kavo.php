@@ -18,6 +18,7 @@
  */
 
 require_once 'kavo.civix.php';
+require_once 'kavo.defines.php';
 
 /**
  * Implements hook_civicrm_config().

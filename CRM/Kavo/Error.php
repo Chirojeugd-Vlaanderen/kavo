@@ -17,6 +17,14 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Hmmm... Wouldn't this be defined already somewhere?
-define('KAVO_HTTP_UNPROCESSABLE_ENTITY', 422);
-
+/**
+ * Error codes used by the kavo extension
+ */
+class CRM_Kavo_Error {
+  const OK = 0;
+  const REQUIRED_FIELDS_MISSING = 1;
+  const WRONG_CONTACT_TYPE = 2;
+  const KAVO_ID_NOT_EMPTY = 4;
+  const EMAIL_TAKEN = 8;
+  const UNKNOWN = 128;
+}
