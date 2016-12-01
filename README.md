@@ -28,11 +28,16 @@ instead of the test.
 
 On a contact summary page, you can click 'Actions', 'Generate KAVO-ID'. This creates a
 KAVO-account for the contact, and saves the KAVO-ID in the contact's KAVO-ID field.
+![Generate KAVO-ID](https://civicrm.org/sites/civicrm.org/files/Screenshot%20from%202016-11-30%2013-03-14.png)
 
 ## api examples
 
-Generate a KAVO-ID for contact with given contact ID
+I aim to make the KAVO-API accessible via the CiviCRM API. For the moment
+only creating new IDs is supported. This is how it works with drush:
 
     drush cvapi Kavo.createaccount contact_id=204
 
-If a kavo-ID already exists for the e-mail address of the given contact, an unclear exception is thrown.
+The PHP code is:
+
+    civicrm_api3('Kavo', 'createaccount', ['contact_id' => 204]);
+
