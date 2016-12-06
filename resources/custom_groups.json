@@ -27,5 +27,90 @@
         "in_selector": "0"
       }
     }
+  },
+  "course_kavo_fields": {
+    "name": "course_kavo_fields",
+    "title": "Kavo course information",
+    "extends": "Event",
+    "style": "Inline",
+    "collapse_display": 0,
+    "weight": 15,
+    "is_active": 1,
+    "table_name": "civicrm_value_course_kavo_fields",
+    "is_multiple": 0,
+    "collapse_adv_display": 0,
+    "is_reserved": 1,
+    "fields": {
+      "course_id": {
+        "name": "course_id",
+        "label": "KAVO course ID",
+        "data_type": "String",
+        "html_type": "Text",
+        "is_required": 0,
+        "is_searchable": 1,
+        "is_search_range": 0,
+        "is_active": 1,
+        "is_view": 0,
+        "text_length": 80,
+        "column_name": "course_id",
+        "in_selector": 0
+      },
+      "responsible_contact_id": {
+        "name": "responsible_contact_id",
+        "label": "Course responsible",
+        "data_type": "ContactReference",
+        "html_type": "Autocomplete-Select",
+        "is_required": 0,
+        "is_searchable": 1,
+        "is_search_range": 0,
+        "is_active": 1,
+        "is_view": 0,
+        "column_name": "responsible_contact_id",
+        "filter": "action=lookup&contact_type=Individual",
+        "in_selector": 0
+      },
+      "target": {
+        "name": "target",
+        "label": "Doelgroep",
+        "data_type": "String",
+        "html_type": "Text",
+        "is_required": 0,
+        "is_searchable": 1,
+        "is_search_range": 0,
+        "is_active": 1,
+        "is_view": 0,
+        "text_length": 255,
+        "column_name": "target",
+        "in_selector": 0
+      },
+      "duration": {
+        "name": "duration",
+        "label": "Duration of the course (in plain text)",
+        "data_type": "String",
+        "html_type": "Text",
+        "is_required": 0,
+        "is_searchable": 1,
+        "is_search_range": 0,
+        "is_active": 1,
+        "is_view": 0,
+        "text_length": 255,
+        "column_name": "duration",
+        "in_selector": 0
+      },
+      "acknowledgement_type": {
+        "name": "acknowledgement_type",
+        "label": "Attest",
+        "data_type": "String",
+        "html_type": "Select",
+        "is_required": 0,
+        "is_searchable": 1,
+        "is_search_range": 0,
+        "is_active": 1,
+        "is_view": 0,
+        "column_name": "acknowledgement_type",
+        "option_group": "kavo_acknowledgement_type",
+        "in_selector": 0
+      }
+    }
   }
 }

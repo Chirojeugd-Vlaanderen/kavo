@@ -1,0 +1,40 @@
+{
+  "kavo_acknowledgement_type": {
+    "name": "kavo_acknowledgement_type",
+    "title": "Attest",
+    "is_reserved": 1,
+    "is_active": 1,
+    "option_values": {
+      "animator": {
+        "label": "Animator",
+        "value": "animator",
+        "name": "animator",
+        "is_default": "0",
+        "weight": "1",
+        "is_optgroup": "0",
+        "is_reserved": "1",
+        "is_active": "1"
+      },
+      "hoofdanimator": {
+        "label": "Hoofdanimator",
+        "value": "hoofdanimator",
+        "name": "hoofdanimator",
+        "is_default": "0",
+        "weight": "2",
+        "is_optgroup": "0",
+        "is_reserved": "1",
+        "is_active": "1"
+      },
+      "instructeur": {
+        "label": "Instructeur",
+        "value": "instructeur",
+        "name": "instructeur",
+        "is_default": "0",
+        "weight": "3",
+        "is_optgroup": "0",
+        "is_reserved": "1",
+        "is_active": "1"
+      }
+    }
+  }
+}

@@ -26,11 +26,12 @@ class CRM_Kavo_Upgrader extends CRM_Kavo_Upgrader_Base {
   // upgrade tasks. They are executed in order (like Drupal's hook_update_N).
 
   /**
-   * Installer.
+   * Re-apply the configuration every time the extension is enabled.
+   *
    * @return TRUE if installation succeeded.
    * @throws Exception
    */
-  public function install() {
+  public function enable() {
     $configResult = civicrm_api3('Civiconfig', 'load_json', [
       // there should be a better way to do this.
       'path' => realpath(__DIR__ . '/../../') . '/resources/'
