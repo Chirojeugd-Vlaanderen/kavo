@@ -45,8 +45,12 @@ function _civicrm_api3_kavo_Createaccount_spec(&$spec) {
  * @throws API_Exception
  */
 function civicrm_api3_kavo_Createaccount($params) {
-  $contact = CRM_Kavo_ContactWorker::get($params['contact_id']);
-  $validationResult = CRM_Kavo_ContactWorker::canCreateAccount($contact);
+  // TODO: inject dependencies? This would be very useful for the KavoInterface.
+  $kavo = new CRM_Kavo_KavoTool();
+  $worker = new CRM_Kavo_Worker_AccountWorker();
+
+  $contact = $worker->get($params['contact_id']);
+  $validationResult = $worker->canCreate($contact);
   if ($validationResult->status != CRM_Kavo_Error::OK) {
     throw new API_Exception($validationResult->message, $validationResult->status, [
       'missing' => $validationResult->extra
@@ -55,7 +59,6 @@ function civicrm_api3_kavo_Createaccount($params) {
   // TODO: maybe create a add hook to get old_certificate and old_certificate_number.
 
   // TODO: inject CRM_Kavo_KavoInterface.
-  $kavo = new CRM_Kavo_KavoTool();
   try {
     $kavoId = $kavo->createAccount($contact);
   }

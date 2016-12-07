@@ -42,4 +42,22 @@ class CRM_Kavo_ValidationResult {
    * @var (optional) additional info.
    */
   public $extra;
+
+  /**
+   * Add extra status bits.
+   *
+   * @param int $status bits to add to the result status.
+   */
+  public function addStatus($status) {
+    $this->status |= $status;
+  }
+
+  /**
+   * Appends a string to the message.
+   *
+   * @param string $message Text to append to the message.
+   */
+  public function addMessage($message) {
+    $this->message .= $message;
+  }
 }
