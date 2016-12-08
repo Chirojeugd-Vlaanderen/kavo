@@ -20,6 +20,12 @@ of this writing (2016-11-28), you need the version from git.
 
 So install those before you install the kavo extension.
 
+The KAVO-API wants a distinct street name and number in the event location. I pass street_name and street_number
+to the API, but I think that standard CiviCRM stores the street address in street_address, and leaves street_name
+and street_number empty. So in that case, creating new courses will fail.
+
+I will ask the KAVO-people to make the API accept street name and number in one field.
+
 ## configuration
 
 Add these two lines to your `civicrm.config.php` file:
