@@ -36,6 +36,10 @@ class CRM_Kavo_Check {
           // prevent 0 from being considered missing.
           continue;
         }
+        if (isset($array[$key]) && is_bool($array[$key])) {
+          // prevent FALSE from being considered missing.
+          continue;
+        }
         $missingValues[] = $key;
       }
     }
