@@ -43,6 +43,7 @@ class CRM_Kavo_Worker_CourseWorker extends CRM_Kavo_Worker {
       'other_sections_unknown',
       'total_course_period',
       'acknowledgement_type',
+      // TODO: Find a way to check required keys for first section.
     ];
   }
 
@@ -55,6 +56,8 @@ class CRM_Kavo_Worker_CourseWorker extends CRM_Kavo_Worker {
     return [
       CRM_Kavo_Field::TARGET(),
       'max_participants',
+      'start_date',
+      'end_date',
       // we'll need chaining for responsible information.
       CRM_Kavo_Field::TOTAL_COURSE_PERIOD(),
       CRM_Kavo_Field::ACKNOWLEDGEMENT_TYPE(),
@@ -65,6 +68,7 @@ class CRM_Kavo_Worker_CourseWorker extends CRM_Kavo_Worker {
       // needed for chaining.
       'price_set_id',
       CRM_Kavo_Field::RESPONSIBLE_CONTACT_ID(),
+      'loc_block_id',
     ];
   }
 
@@ -89,6 +93,19 @@ class CRM_Kavo_Worker_CourseWorker extends CRM_Kavo_Worker {
         'id' => '$value.' . CRM_Kavo_Field::RESPONSIBLE_CONTACT_ID() . '_id',
         'return' => ['first_name', 'last_name', 'email', 'phone'],
       ],
+      'api.LocBlock.getsingle' => [
+        'id' => '$value.loc_block_id',
+        'api.Address.getsingle' => [
+          'id' => '$value.address_id',
+          'return' => [
+            'street_name',
+            'street_number',
+            'street_number_suffix',
+            'postal_code',
+            'city',
+          ],
+        ]
+      ]
     ];
   }
 
@@ -107,12 +124,26 @@ class CRM_Kavo_Worker_CourseWorker extends CRM_Kavo_Worker {
       'responsible_first_name' => $civiEntity['api.Contact.getsingle']['first_name'],
       'responsible_email' => $civiEntity['api.Contact.getsingle']['email'],
       'responsible_phone' => $civiEntity['api.Contact.getsingle']['phone'],
-      // We don't do sections.
-      'number_of_sections' => 0,
-      'other_sections_unknown' => TRUE,
+      // The API documentation says that sections are optional. But the API
+      // complains if no sections are given. So let's create one section.
+      'number_of_sections' => 1,
+      'other_sections_unknown' => FALSE,
       'total_course_period' => $civiEntity[CRM_Kavo_Field::TOTAL_COURSE_PERIOD()],
       'acknowledgement_type' => $civiEntity[CRM_Kavo_Field::ACKNOWLEDGEMENT_TYPE()],
-      'sections' => [],
+      'sections' => [[
+        'start_date' => $this->extractDate($civiEntity['start_date']),
+        'end_date' => $this->extractDate($civiEntity['end_date']),
+        'start_time' => $this->extractTime($civiEntity['start_date']),
+        'end_time' => $this->extractTime($civiEntity['end_date']),
+        'responsible_last_name' => $civiEntity['api.Contact.getsingle']['last_name'],
+        'responsible_first_name' => $civiEntity['api.Contact.getsingle']['first_name'],
+        'responsible_phone' => $civiEntity['api.Contact.getsingle']['phone'],
+        'street' => $civiEntity['api.LocBlock.getsingle']['api.Address.getsingle']['street_name'],
+        'number' => $civiEntity['api.LocBlock.getsingle']['api.Address.getsingle']['street_number'] . ' '
+          . $civiEntity['api.LocBlock.getsingle']['api.Address.getsingle']['street_number_suffix'],
+        'postal_code' => $civiEntity['api.LocBlock.getsingle']['api.Address.getsingle']['postal_code'],
+        'city' => $civiEntity['api.LocBlock.getsingle']['api.Address.getsingle']['city'],
+      ]],
     ];
   }
 
@@ -127,6 +158,10 @@ class CRM_Kavo_Worker_CourseWorker extends CRM_Kavo_Worker {
     if (empty($civiEntity[CRM_Kavo_Field::RESPONSIBLE_CONTACT_ID()])) {
       $result->addStatus(CRM_Kavo_Error::RESPONSIBLE_MISSING);
       $result->addMessage("A course needs a responsible contact.\n");
+    }
+    if (empty($civiEntity['loc_block_id']) || empty($civiEntity['api.LocBlock.getsingle'][address_id])) {
+      $result->addStatus(CRM_Kavo_Error::ADDRESS_MISSING);
+      $result->addMessage("A course needs a location.\n");
     }
     if (!empty($civiEntity[CRM_Kavo_Field::COURSE_ID()])) {
       $result->addStatus(CRM_Kavo_Error::ALREADY_REGISTERED);

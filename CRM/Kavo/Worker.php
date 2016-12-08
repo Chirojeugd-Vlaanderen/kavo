@@ -104,4 +104,26 @@ abstract class CRM_Kavo_Worker {
     }
     return new CRM_Kavo_ValidationResult($status, $message, $missing);
   }
+
+  /**
+   * Extract date from CiviCRM API datetime result.
+   *
+   * @param $civiDate
+   * @return string
+   */
+  protected function extractDate($civiDate) {
+    $date = date_parse($civiDate);
+    return "${date['year']}-${date['month']}-${date['day']}";
+  }
+
+  /**
+   * Extract time from CiviCRM API datetime result.
+   *
+   * @param $civiDate
+   * @return string
+   */
+  protected function extractTime($civiDate) {
+    $date = date_parse($civiDate);
+    return "${date['hour']}:${date['minute']}";
+  }
 }

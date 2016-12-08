@@ -62,10 +62,16 @@ function civicrm_api3_kavo_Createcourse($params) {
     throw new API_Exception($e->getMessage(), $e->getCode());
   }
 
+  // TODO: support sequential => 1
+
   $saveResult = civicrm_api3('Event', 'create', [
     'id' => $event['id'],
     CRM_Kavo_Field::COURSE_ID() => $courseId,
   ]);
+
+  // CiviCRM does not return custom fields in a create-result, so we'll add
+  // the event ID to the result ourselves.
+  $saveResult['values'][$params['event_id']][CRM_Kavo_Field::COURSE_ID()] = $courseId;
 
   return CRM_Kavo_Check::assertValidApiResult($saveResult);
 }

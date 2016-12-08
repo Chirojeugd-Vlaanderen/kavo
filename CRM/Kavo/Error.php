@@ -27,5 +27,6 @@ class CRM_Kavo_Error {
   const ALREADY_REGISTERED = 4;
   const EMAIL_TAKEN = 8;
   const RESPONSIBLE_MISSING = 16;
+  const ADDRESS_MISSING = 32;
   const UNKNOWN = 128;
 }
