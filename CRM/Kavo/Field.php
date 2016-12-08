@@ -18,19 +18,59 @@
  */
 
 /**
- * Custom fields created by the kavo extension.
+ * Returns the API-names of some custom KAVO Fields.
  *
- * (One right now, but more to follow, like kavo course ID).
- * I would love to do this with something like class constants, but you cannot
- * assign the result of a function call to a const.
+ * This will only work if the be.chiro.civi.idcache extension is installed
+ * and enabled.
  */
 class CRM_Kavo_Field {
   /**
-   * Returns the api identifier for the custom field containing the KAVO-ID.
    * @return string
    */
   static function KAVO_ID() {
     // You need to install the be.chiro.civi.idcache extension for this to work.
     return CRM_IdCache_Cache_CustomField::getApiField('individual_kavo_fields', 'kavo_id');
+  }
+
+  /**
+   * @return string
+   */
+  static function TARGET() {
+    return CRM_IdCache_Cache_CustomField::getApiField('course_kavo_fields', 'target');
+  }
+
+  /**
+   * @return string
+   */
+  static function TOTAL_COURSE_PERIOD() {
+    return CRM_IdCache_Cache_CustomField::getApiField('course_kavo_fields', 'total_course_period');
+  }
+
+  /**
+   * @return string
+   */
+  static function ACKNOWLEDGEMENT_TYPE() {
+    return CRM_IdCache_Cache_CustomField::getApiField('course_kavo_fields', 'acknowledgement_type');
+  }
+
+  /**
+   * @return string
+   */
+  static function RESPONSIBLE_CONTACT_ID() {
+    return CRM_IdCache_Cache_CustomField::getApiField('course_kavo_fields', 'responsible_contact_id');
+  }
+
+  /**
+   * @return string
+   */
+  static function PRICE_PARTICIPANT() {
+    return CRM_IdCache_Cache_CustomField::getApiField('course_kavo_fields', 'price_participant');
+  }
+
+  /**
+   * @return string
+   */
+  static function COURSE_ID() {
+    return CRM_IdCache_Cache_CustomField::getApiField('course_kavo_fields', 'course_id');
   }
 }

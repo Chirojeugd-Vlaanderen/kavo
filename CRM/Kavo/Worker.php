@@ -66,9 +66,7 @@ abstract class CRM_Kavo_Worker {
    * @param array $civiEntity
    * @return array
    */
-  protected function mapToKavo(array $civiEntity) {
-    return $civiEntity;
-  }
+  public abstract function mapToKavo(array $civiEntity);
 
   /**
    * Retrieves the CiviCRM entity with given $id.

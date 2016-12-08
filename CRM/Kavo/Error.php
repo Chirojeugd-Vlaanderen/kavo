@@ -24,7 +24,8 @@ class CRM_Kavo_Error {
   const OK = 0;
   const REQUIRED_FIELDS_MISSING = 1;
   const WRONG_CONTACT_TYPE = 2;
-  const KAVO_ID_NOT_EMPTY = 4;
+  const ALREADY_REGISTERED = 4;
   const EMAIL_TAKEN = 8;
+  const RESPONSIBLE_MISSING = 16;
   const UNKNOWN = 128;
 }

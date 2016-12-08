@@ -38,7 +38,7 @@ class CRM_Kavo_Worker_AccountWorker extends CRM_Kavo_Worker {
       $result->addMessage("Only individuals can get a KAVO-ID.\n");
     }
     if (!empty($contact[CRM_Kavo_Field::KAVO_ID()])) {
-      $result->addStatus(CRM_Kavo_Error::KAVO_ID_NOT_EMPTY);
+      $result->addStatus(CRM_Kavo_Error::ALREADY_REGISTERED);
       $result->addMessage("Contact already has a KAVO-ID.\n");
     }
     return $result;
@@ -76,5 +76,18 @@ class CRM_Kavo_Worker_AccountWorker extends CRM_Kavo_Worker {
    */
   protected function getCiviChainedRequests() {
     return [];
+  }
+
+  /**
+   * Map the CiviCRM entity to the corresponding KAVO-entity.
+   *
+   * Override as needed.
+   *
+   * @param array $civiEntity
+   * @return array
+   */
+  public function mapToKavo(array $civiEntity) {
+    // Contact maps 1-to-1 on KAVO account.
+    return $civiEntity;
   }
 }
