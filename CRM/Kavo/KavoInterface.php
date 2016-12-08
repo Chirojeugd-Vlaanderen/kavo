@@ -40,13 +40,33 @@ interface CRM_Kavo_KavoInterface {
   public function hello();
 
   /**
-   * After account creation, an email is sent to the user for account confirmation (only when using API in production).
+   * Create a KAVO account.
    *
-   * It is important to save the kavo_id for this user. This kavo_id will be needed for all further communications.
+   * After account creation, an email is sent to the user for account
+   * confirmation (only when using API in production).
+   *
+   * It is important to save the kavo_id for this user. This kavo_id will be
+   * needed for all further communications.
    * See https://cjsm.be/kavotest/docs/#api-User-CreateUser
    *
    * @param array $contact
    * @return string KAVO-ID
    */
   public function createAccount(array $contact);
+
+  /**
+   * Create a KAVO course.
+   *
+   * When you create a course, you can also add courseSections. This is not
+   * mandatory, although when adding a section, all section fields will be
+   * required. In the response you will receive the course_id and the id's
+   * corresponding to the created sections. You will have to store them in
+   * order to update/delete a course/section later on.
+   *
+   * See https://cjsm.be/kavotest/docs/#api-Courses-CreateCourse
+   *
+   * @param array $course
+   * @return string course ID
+   */
+  public function createCourse(array $course);
 }

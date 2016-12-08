@@ -32,6 +32,10 @@ class CRM_Kavo_Check {
     $missingValues = [];
     foreach ($keys as $key) {
       if (empty($array[$key])) {
+        if (isset($array[$key]) && is_numeric($array[$key])) {
+          // prevent 0 from being considered missing.
+          continue;
+        }
         $missingValues[] = $key;
       }
     }

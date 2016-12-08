@@ -2,6 +2,14 @@
 
 CiviCRM extension to link CiviCRM to the 'Kadervormingstool' of the Flemish government. Work in progress.
 
+## warning: dev
+
+This extension is under production. If it fails because some custom fields are not found,
+disable the extension, and enable it again:
+
+    drush cvapi Extension.disable key=be.chiro.civi.kavo
+    drush cvapi Extension.enable key=be.chiro.civi.kavo
+
 ## prerequisites
 
 This extension depends on two other CiviCRM extensions:

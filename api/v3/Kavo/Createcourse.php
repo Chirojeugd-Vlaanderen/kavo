@@ -18,25 +18,22 @@
  */
 
 /**
- * Kavo.Createaccount API specification (optional)
+ * Kavo.Createcourse API specification (optional)
  * This is used for documentation and validation.
  *
  * @param array $spec description of fields supported by this API call
  * @return void
  * @see http://wiki.civicrm.org/confluence/display/CRMDOC/API+Architecture+Standards
  */
-function _civicrm_api3_kavo_Createaccount_spec(&$spec) {
-  $spec['contact_id'] = [
+function _civicrm_api3_kavo_Createcourse_spec(&$spec) {
+  $spec['event_id'] = [
     'type' => CRM_Utils_Type::T_INT,
     'api.required' => 1
   ];
 }
 
 /**
- * Kavo.Createaccount API.
- *
- * Creates a KAVO account for the CiviCRM contact with id $params['contact_id'],
- * and saves the new KAVO-ID to the appropriate custom field.
+ * Kavo.Createcourse API
  *
  * @param array $params
  * @return array API result descriptor
@@ -44,37 +41,31 @@ function _civicrm_api3_kavo_Createaccount_spec(&$spec) {
  * @see civicrm_api3_create_error
  * @throws API_Exception
  */
-function civicrm_api3_kavo_Createaccount($params) {
-  // TODO: inject dependencies? This would be very useful for the KavoInterface.
-  // TODO: Refactor: This looks way too much like Kavo.createcourse
+function civicrm_api3_kavo_Createcourse($params) {
+  // TODO: inject dependencies? Especially useful for the KavoInterface.
+  // TODO: Refactor: This looks way too much like Kavo.createaccount.
   $kavo = new CRM_Kavo_KavoTool();
-  $worker = new CRM_Kavo_Worker_AccountWorker();
+  $worker = new CRM_Kavo_Worker_CourseWorker();
 
-  $contact = $worker->get($params['contact_id']);
-  $validationResult = $worker->canCreate($contact);
+  $event = $worker->get($params['event_id']);
+  $validationResult = $worker->canCreate($event);
   if ($validationResult->status != CRM_Kavo_Error::OK) {
     throw new API_Exception($validationResult->message, $validationResult->status, [
       'missing' => $validationResult->extra
     ]);
   }
-  // TODO: maybe create a add hook to get old_certificate and old_certificate_number.
 
   try {
-    $kavoId = $kavo->createAccount($contact);
+    $courseId = $kavo->createCourse($worker->mapToKavo($event));
   }
   catch (Exception $e) {
     throw new API_Exception($e->getMessage(), $e->getCode());
   }
 
-  // TODO: support sequential => 1
-  $saveResult = civicrm_api3('Contact', 'create', [
-    'id' => $contact['id'],
-    CRM_Kavo_Field::KAVO_ID() => $kavoId,
+  $saveResult = civicrm_api3('Event', 'create', [
+    'id' => $event['id'],
+    CRM_Kavo_Field::COURSE_ID() => $courseId,
   ]);
-
-  // You would think that the result of this civicrm API call would include the
-  // kavo id. Not. So let's hack it in.
-  $saveResult['values'][$params['contact_id']][CRM_Kavo_Field::KAVO_ID()] = $kavoId;
 
   return CRM_Kavo_Check::assertValidApiResult($saveResult);
 }

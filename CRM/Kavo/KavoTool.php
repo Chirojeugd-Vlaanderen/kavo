@@ -124,4 +124,23 @@ class CRM_Kavo_KavoTool implements CRM_Kavo_KavoInterface {
     $result = $this->callApi('account', $contact, $this->getToken(), 'POST');
     return $result->data->kavo_id;
   }
+
+  /**
+   * Create a KAVO course.
+   *
+   * When you create a course, you can also add courseSections. This is not
+   * mandatory, although when adding a section, all section fields will be
+   * required. In the response you will receive the course_id and the id's
+   * corresponding to the created sections. You will have to store them in
+   * order to update/delete a course/section later on.
+   *
+   * See https://cjsm.be/kavotest/docs/#api-Courses-CreateCourse
+   *
+   * @param array $course
+   * @return string course ID
+   */
+  public function createCourse(array $course) {
+    $result = $this->callApi('courses', $course, $this->getToken(), 'POST');
+    return $result->data->course_id;
+  }
 }

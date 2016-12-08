@@ -102,7 +102,7 @@ class CRM_Kavo_Worker_CourseWorker extends CRM_Kavo_Worker {
     return [
       'target' => $civiEntity[CRM_Kavo_Field::TARGET()],
       'max_participants' => $civiEntity['max_participants'],
-      'price_participants' => $civiEntity[CRM_Kavo_Field::PRICE_PARTICIPANT()],
+      'price_participant' => $civiEntity[CRM_Kavo_Field::PRICE_PARTICIPANT()],
       'responsible_last_name' => $civiEntity['api.Contact.getsingle']['last_name'],
       'responsible_first_name' => $civiEntity['api.Contact.getsingle']['first_name'],
       'responsible_email' => $civiEntity['api.Contact.getsingle']['email'],
@@ -112,6 +112,7 @@ class CRM_Kavo_Worker_CourseWorker extends CRM_Kavo_Worker {
       'other_sections_unknown' => TRUE,
       'total_course_period' => $civiEntity[CRM_Kavo_Field::TOTAL_COURSE_PERIOD()],
       'acknowledgement_type' => $civiEntity[CRM_Kavo_Field::ACKNOWLEDGEMENT_TYPE()],
+      'sections' => [],
     ];
   }
 
