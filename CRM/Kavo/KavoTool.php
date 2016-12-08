@@ -22,6 +22,26 @@
  */
 class CRM_Kavo_KavoTool implements CRM_Kavo_KavoInterface {
   /**
+   * Implementation of my_http_build_query that does not ignore empty arrays.
+   *
+   * The KAVO API requires a sections parameter to create a course, even if
+   * this settings parameter is empty. This is probably a bug in the API,
+   * for which this function is a workaround.
+   *
+   * @param array $params containing properties.
+   * @return string
+   */
+  private function my_http_build_query(array $params) {
+    $result = http_build_query($params);
+
+    foreach ($params as $key => $value) {
+      if (is_array($value) && empty($value)) {
+        $result .= "&" . $key . "=";
+      }
+    }
+    return $result;
+  }
+  /**
    * Calls the KAVO API.
    *
    * @param string $resource
@@ -46,12 +66,12 @@ class CRM_Kavo_KavoTool implements CRM_Kavo_KavoInterface {
     }
     switch ($verb) {
       case 'GET':
-        $opts[CURLOPT_URL] = $endpoint . '?' . http_build_query($bodyParams);
+        $opts[CURLOPT_URL] = $endpoint . '?' . $this->my_http_build_query($bodyParams);
         break;
       case 'POST':
         $opts[CURLOPT_URL] = $endpoint;
         $opts[CURLOPT_POST] = TRUE;
-        $opts[CURLOPT_POSTFIELDS] = http_build_query($bodyParams);
+        $opts[CURLOPT_POSTFIELDS] = $this->my_http_build_query($bodyParams);
         break;
       default:
         throw new Exception('This is not implemented (yet).');
