@@ -44,6 +44,16 @@ On a contact summary page, you can click 'Actions', 'Generate KAVO-ID'. This cre
 KAVO-account for the contact, and saves the KAVO-ID in the contact's KAVO-ID field.
 ![Generate KAVO-ID](https://civicrm.org/sites/civicrm.org/files/Screenshot%20from%202016-11-30%2013-03-14.png)
 
+## send an event as course to KAVO
+
+To send an event as a course to KAVO, you go to the event info page, and click on the 'spanner' icon. In the menu
+that pops up, click 'register as KAVO course'.
+![Register an event as KAVO course](https://civicrm.org/sites/civicrm.org/files/Screenshot%20from%202016-12-14%2015-58-04.png)
+
+You can do this from the event dashboard, or from the 'manage events' form as well. It does not work from the
+page used to edit the event info and settings, because this does not seem to be customizable. If you want to do this,
+you might want to provide a custom template for `templates/CRM/Event/Form/ManageEvent/Tab.tpl`.
+
 ## api examples
 
 I aim to make the KAVO-API accessible via the CiviCRM API. For the moment

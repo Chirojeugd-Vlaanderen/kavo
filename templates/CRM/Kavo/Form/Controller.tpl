@@ -11,10 +11,12 @@
     <p>
         {ts 1=$kavoId}Assigned KAVO-ID %1.{/ts}
     </p>
+    {if $entityName == 'contact'}
     <p>
         {ts}You will need to refresh the page after clicking 'OK'.{/ts}
         {ts}(because I don't know how to update the view automatically.){/ts}
     </p>
+    {/if}
 {else}
     <p>
         {* TODO: split error code into distinct errors, because smarty cannot do bitwise operations. *}
