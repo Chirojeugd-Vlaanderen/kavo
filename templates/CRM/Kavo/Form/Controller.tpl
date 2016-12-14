@@ -36,6 +36,12 @@
                 {if $code == 8}
                     {ts}A KAVO-ID already exists for this email address.{/ts}
                 {/if}
+                {if $code == 16}
+                    {ts}A responsible contact for the course is missing.{/ts}
+                {/if}
+                {if $code == 32}
+                    {ts}The course should have a location with an address.{/ts}
+                {/if}
                 {if $code == 128}
                     {ts}The KAVO API returned an unexpected result.{/ts}
                 {/if}

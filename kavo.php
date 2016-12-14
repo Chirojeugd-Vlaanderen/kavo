@@ -168,6 +168,23 @@ function kavo_civicrm_summaryActions(&$actions, $contactID) {
 }
 
 /**
+ * Implements hook_civicrm_tabset.
+ *
+ * @param $tabsetName
+ * @param $tabs
+ * @param $context
+ */
+function kavo_civicrm_tabset($tabsetName, &$tabs, $context) {
+  if ($tabsetName == 'civicrm/event/manage') {
+    $tabs['kavo'] = [
+      'title' => 'Register at KAVO',
+      'url' => 'civicrm/kavo/controller',
+      'field' => 'id',
+    ];
+  }
+}
+
+/**
  * Functions below this ship commented out. Uncomment as required.
  *
 

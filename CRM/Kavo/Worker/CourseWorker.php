@@ -159,7 +159,7 @@ class CRM_Kavo_Worker_CourseWorker extends CRM_Kavo_Worker {
       $result->addStatus(CRM_Kavo_Error::RESPONSIBLE_MISSING);
       $result->addMessage("A course needs a responsible contact.\n");
     }
-    if (empty($civiEntity['loc_block_id']) || empty($civiEntity['api.LocBlock.getsingle'][address_id])) {
+    if (empty($civiEntity['loc_block_id']) || empty($civiEntity['api.LocBlock.getsingle']['address_id'])) {
       $result->addStatus(CRM_Kavo_Error::ADDRESS_MISSING);
       $result->addMessage("A course needs a location.\n");
     }
