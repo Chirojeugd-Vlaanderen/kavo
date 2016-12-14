@@ -25,6 +25,11 @@ class CRM_Kavo_Form_Controller extends CRM_Core_Form {
   protected $id;
 
   /**
+   * @var string
+   */
+  protected $action;
+
+  /**
    * Executes the requested action.
    *
    * The idea is to use this form for multiple smaller actions for the
@@ -39,6 +44,7 @@ class CRM_Kavo_Form_Controller extends CRM_Core_Form {
 
     $this->contactId = CRM_Utils_Request::retrieve('cid', 'Integer');
     $this->id = CRM_Utils_Request::retrieve('id', 'Integer');
+    $this->action = CRM_Utils_Request::retrieve('action', 'String');
 
     if (!empty($this->_submitValues)) {
       // preProcess seems to be called when the form is submitted as well.
@@ -47,15 +53,17 @@ class CRM_Kavo_Form_Controller extends CRM_Core_Form {
       return;
     }
     $action = CRM_Utils_Request::retrieve('action', 'String');
-    if ($action == 'new_id') {
+    if ($this->action == 'new_id') {
       $this->newId($this->contactId);
+      $this->assign('entityName', 'contact');
     }
-    else if ($action == 2 && !empty($this->id)) {
+    else if ($this->action == 2 && !empty($this->id)) {
       // CiviCRM seems to automatically assign 2 to 'action' in links
       // generated with hook_civicrm_tabset.
       // We assume that the user wants to send a course to KAVO. At the moment
       // there is no way we can be sure about that.
       $this->newCourse($this->id);
+      $this->assign('entityName', 'event');
     }
     else {
       throw new Exception("Unexpected action: ${action}.");

@@ -31,7 +31,7 @@
                     {ts}Only individuals can get a KAVO account.{/ts}
                 {/if}
                 {if $code == 4}
-                    {ts}This contact already has a KAVO-ID.{/ts}
+                    {ts 1=$entityName}This %1 already has a KAVO-ID.{/ts}
                 {/if}
                 {if $code == 8}
                     {ts}A KAVO-ID already exists for this email address.{/ts}
