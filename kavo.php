@@ -177,7 +177,7 @@ function kavo_civicrm_summaryActions(&$actions, $contactID) {
 function kavo_civicrm_tabset($tabsetName, &$tabs, $context) {
   if ($tabsetName == 'civicrm/event/manage') {
     $tabs['kavo'] = [
-      'title' => 'Register at KAVO',
+      'title' => 'Register as KAVO course',
       'url' => 'civicrm/kavo/controller',
       'field' => 'id',
     ];
