@@ -56,12 +56,13 @@ you might want to provide a custom template for `templates/CRM/Event/Form/Manage
 
 ## api examples
 
-I aim to make the KAVO-API accessible via the CiviCRM API. For the moment
-only creating new IDs is supported. This is how it works with drush:
+The KAVO-API will be accessable via the CiviCRM API. Some examples with drush:
 
     drush cvapi Kavo.createaccount contact_id=204
+    drush cvapi Kavo.createevent event_id=2
 
-The PHP code is:
+Or in php:
 
     civicrm_api3('Kavo', 'createaccount', ['contact_id' => 204]);
+    civicrm_api3('Kavo', 'createevent', ['event_id' => 2]);
 
