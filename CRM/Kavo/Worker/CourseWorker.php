@@ -64,6 +64,7 @@ class CRM_Kavo_Worker_CourseWorker extends CRM_Kavo_Worker {
       // Participant price is stored in a dedicated custom field, because
       // we don't know which price field to use.
       CRM_Kavo_Field::PRICE_PARTICIPANT(),
+      CRM_Kavo_Field::COURSE_ID(),
       // If we want to do chained calls, we need to retrieve the fields
       // needed for chaining.
       'price_set_id',
