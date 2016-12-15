@@ -24,4 +24,8 @@
   <civix>
     <namespace>CRM/Kavo</namespace>
   </civix>
+  <requires>
+    <ext>org.civicoop.configitems</ext>
+    <ext>be.chiro.civi.idcache</ext>
+  </requires>
 </extension>
