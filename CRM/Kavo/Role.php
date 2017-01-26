@@ -1,7 +1,7 @@
 <?php
 /*
   be.chiro.civi.kavo - support for the KAVO-API.
-  Copyright (C) 2016  Chirojeugd-Vlaanderen vzw
+  Copyright (C) 2017  Chirojeugd-Vlaanderen vzw
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU Affero General Public License as
@@ -17,17 +17,15 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 /**
- * Error codes used by the kavo extension
+ * Returns participant role IDs.
  */
-class CRM_Kavo_Error {
-  const OK = 0;
-  const REQUIRED_FIELDS_MISSING = 1;
-  const WRONG_CONTACT_TYPE = 2;
-  const ALREADY_REGISTERED = 4;
-  const EMAIL_TAKEN = 8;
-  const RESPONSIBLE_MISSING = 16;
-  const ADDRESS_MISSING = 32;
-  const KAVO_ID_MISSING = 64;
-  const UNKNOWN = 128;
+class CRM_Kavo_Role {
+  static function ATTENDEE() {
+    // FIX ME: make this configurable.
+    // We are not sure if every CiviCRM instance has a participant role with
+    // name 'Attendee'.
+    return CRM_IdCache_Cache_OptionValue::getValue('participant_role', 'Attendee');
+  }
 }

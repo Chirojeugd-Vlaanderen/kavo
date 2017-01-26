@@ -61,8 +61,6 @@ abstract class CRM_Kavo_Worker {
   /**
    * Map the CiviCRM entity to the corresponding KAVO-entity.
    *
-   * Override as needed.
-   *
    * @param array $civiEntity
    * @return array
    */
