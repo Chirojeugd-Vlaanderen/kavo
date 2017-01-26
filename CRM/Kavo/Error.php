@@ -28,6 +28,6 @@ class CRM_Kavo_Error {
   const EMAIL_TAKEN = 8;
   const RESPONSIBLE_MISSING = 16;
   const ADDRESS_MISSING = 32;
-  const KAVO_ID_MISSING = 64;
-  const UNKNOWN = 128;
+  const PARTICIPANT_TOO_YOUNG = 64;
+  const UNKNOWN = 65536;
 }

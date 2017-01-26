@@ -100,7 +100,7 @@ abstract class CRM_Kavo_Worker {
       $status |= CRM_Kavo_Error::REQUIRED_FIELDS_MISSING;
       $message .= "Required fields missing: " . implode(', ', $missing) . "\n";
     }
-    return new CRM_Kavo_ValidationResult($status, $message, $missing);
+    return new CRM_Kavo_ValidationResult($status, $message, ['missing' => $missing]);
   }
 
   /**
@@ -123,5 +123,15 @@ abstract class CRM_Kavo_Worker {
   protected function extractTime($civiDate) {
     $date = date_parse($civiDate);
     return "${date['hour']}:${date['minute']}";
+  }
+   /**
+   * Extract year from CiviCRM API datetime result.
+   *
+   * @param $civiDate
+   * @return integer|NULL
+   */
+  protected function extractYear($civiDate) {
+    $date = date_parse($civiDate);
+    return $date ? intval(date['year']) : NULL;
   }
 }

@@ -86,15 +86,61 @@ class CRM_Kavo_Worker_ParticipantWorker extends CRM_Kavo_Worker {
    *
    * @param array $civiEntity a CiviCRM participant.
    * @return \CRM_Kavo_ValidationResult
+   * @throws \Exception
    */
   public function validateKavo(array $civiEntity) {
+    // TODO: split function
     $result = parent::validateKavo($civiEntity);
+    $contact = $civiEntity['api.Contact.getsingle'];
+    $event = $civiEntity['api.Event.getsingle'];
 
     if ($civiEntity['role_id'] != CRM_Kavo_Role::ATTENDEE()) {
       // We only care about attendees atm.
       return $result;
     }
 
+    if (empty($civiEntity[CRM_Kavo_Field::ACKNOWLEDGEMENT_TYPE()])) {
+      // We don't care if there is no acknowledgement type.
+      return $result;
+    }
+
+    if (empty($contact[CRM_Kavo_Field::KAVO_ID()])) {
+      $result->addStatus(CRM_Kavo_Error::REQUIRED_FIELDS_MISSING);
+      $result->addMessage('You need a KAVO-ID to subscribe to this course.');
+      $result->extra['missing'][] = 'kavo_id';
+    }
+
+    // Age check.
+
+    // We need to verify the age that the participant will have in the calendar
+    // year of the course, see the specs, #10.
+    $ageRestriction = [
+      'animator' => 16,
+      'hoofdanimator' => 18,
+      'instructeur' => 19,
+    ];
+    $yearOfBirth = $this->extractYear($contact['birth_date']);
+    $yearOfEvent = $this->extractYear($event['start_date']);
+    if (empty($yearOfBirth)) {
+      $result->addStatus(CRM_Kavo_Error::REQUIRED_FIELDS_MISSING);
+      $result->addMessage('Birth date is required to subscribe.');
+      $result->extra['missing'][] = 'birth_date';
+    }
+    if (empty($yearOfEvent)) {
+      $result->addStatus(CRM_Kavo_Error::REQUIRED_FIELDS_MISSING);
+      $result->addMessage('Event date missing.');
+      $result->extra['missing'][] = 'start_date';
+    }
+
+    if (!empty($yearOfBirth) && !empty($yearOfEvent)) {
+      $age = $yearOfEvent - $yearOfBirth;
+      $minAge = $ageRestriction[$event[CRM_Kavo_Field::ACKNOWLEDGEMENT_TYPE()]];
+      if ($age < $minAge) {
+        $result->addStatus(CRM_Kavo_Error::PARTICIPANT_TOO_YOUNG);
+        $result->addMessage("Participant too young; born after " . $yearOfEvent - $minAge . ".\n" );
+        $result->extra = ['ageLimit' => $minAge];
+      }
+    }
     return $result;
   }
 
