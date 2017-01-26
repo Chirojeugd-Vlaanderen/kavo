@@ -62,18 +62,4 @@ class CRM_Kavo_Check {
     }
     throw new Exception('Values missing: ' . implode(', ', $problems));
   }
-
-  /**
-   * Throws an exception if the given CiviCRM $apiResult is an error.
-   *
-   * @param array $apiResult
-   * @return array the same $apiResult
-   * @throws Exception
-   */
-  public static function assertValidApiResult(array $apiResult) {
-    if ($apiResult['is_error'] == 0) {
-      return $apiResult;
-    }
-    throw new Exception($apiResult['error_message']);
-  }
 }

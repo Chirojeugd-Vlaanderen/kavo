@@ -73,6 +73,6 @@ function civicrm_api3_kavo_Createcourse($params) {
   // the event ID to the result ourselves.
   $saveResult['values'][$params['event_id']][CRM_Kavo_Field::COURSE_ID()] = $courseId;
 
-  return CRM_Kavo_Check::assertValidApiResult($saveResult);
+  return $saveResult;
 }
 

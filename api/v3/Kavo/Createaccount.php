@@ -76,6 +76,6 @@ function civicrm_api3_kavo_Createaccount($params) {
   // kavo id. Not. So let's hack it in.
   $saveResult['values'][$params['contact_id']][CRM_Kavo_Field::KAVO_ID()] = $kavoId;
 
-  return CRM_Kavo_Check::assertValidApiResult($saveResult);
+  return $saveResult;
 }
 

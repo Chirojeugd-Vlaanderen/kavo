@@ -36,11 +36,10 @@ class CRM_Kavo_Upgrader extends CRM_Kavo_Upgrader_Base {
       // there should be a better way to do this.
       'path' => realpath(__DIR__ . '/../../') . '/resources/'
     ]);
-    // If you get an error below
+    // If you get an error
     // 'API (Civiconfig, load_json) does not exist (join the API team and implement it!)',
     // you need to install the org.civicoop.configitems extension.
-    CRM_Kavo_Check::assertValidApiResult($configResult);
-    return TRUE;
+    return !$configResult['is_error'];
   }
 
   /**
@@ -57,18 +56,16 @@ class CRM_Kavo_Upgrader extends CRM_Kavo_Upgrader_Base {
     // load_json will complain about an existing field. So let's work around
     // this:
 
-    $deleteResult = civicrm_api3('CustomField', 'get', [
+    civicrm_api3('CustomField', 'get', [
       'custom_group_id' => 'course_kavo_fields',
       'name' => 'duration',
       'api.CustomField.delete' => ['id' => '$value.id'],
     ]);
-    CRM_Kavo_Check::assertValidApiResult($deleteResult);
     $configResult = civicrm_api3('Civiconfig', 'load_json', [
       // there should be a better way to do this.
       'path' => realpath(__DIR__ . '/../../') . '/resources/'
     ]);
-    CRM_Kavo_Check::assertValidApiResult($configResult);
-    return TRUE;
+    return !$configResult['is_error'];
   }
 }
 
