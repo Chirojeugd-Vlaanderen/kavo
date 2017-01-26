@@ -66,3 +66,7 @@ Or in php:
     civicrm_api3('Kavo', 'createaccount', ['contact_id' => 204]);
     civicrm_api3('Kavo', 'createevent', ['event_id' => 2]);
 
+## source code structure
+
+If you want to contribute, you might want to check out how I try to
+bring [structure to the code](doc/CodeStructure.md).
