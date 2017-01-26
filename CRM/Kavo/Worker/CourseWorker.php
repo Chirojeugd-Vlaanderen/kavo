@@ -144,8 +144,8 @@ class CRM_Kavo_Worker_CourseWorker extends CRM_Kavo_Worker {
    * @param array $civiEntity
    * @return \CRM_Kavo_ValidationResult
    */
-  public function canCreate(array $civiEntity) {
-    $result = parent::canCreate($civiEntity);
+  public function validateKavo(array $civiEntity) {
+    $result = parent::validateKavo($civiEntity);
     if (empty($civiEntity[CRM_Kavo_Field::RESPONSIBLE_CONTACT_ID()])) {
       $result->addStatus(CRM_Kavo_Error::RESPONSIBLE_MISSING);
       $result->addMessage("A course needs a responsible contact.\n");

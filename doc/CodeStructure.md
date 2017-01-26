@@ -31,6 +31,8 @@ This directory contains the meat of the extension.
   custom fields the extension creates. Those names are cached using the CiviCRM cache (which is not optimal, but
   it works). The static methods create a direct dependency to the API, which might be a problem if we want to
   do mocking in unit tests at some point in the future.
+* [Role](../CRM/Kavo/Role.php) Similar to field, with similar problems. Use this class to get ID's of
+  CiviCRM participant roles.
 * [ValidationResult](../CRM/Kavo/ValidationResult.php) A class that's used for validation results in the
   [worker clases](../CRM/Kavo/Worker).
 * [Check](../CRM/Kavo/Check.php) performs some very basic checks.

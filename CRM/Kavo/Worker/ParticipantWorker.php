@@ -87,8 +87,8 @@ class CRM_Kavo_Worker_ParticipantWorker extends CRM_Kavo_Worker {
    * @param array $civiEntity a CiviCRM participant.
    * @return \CRM_Kavo_ValidationResult
    */
-  public function canCreate(array $civiEntity) {
-    $result = parent::canCreate($civiEntity);
+  public function validateKavo(array $civiEntity) {
+    $result = parent::validateKavo($civiEntity);
 
     if ($civiEntity['role_id'] != CRM_Kavo_Role::ATTENDEE()) {
       // We only care about attendees atm.

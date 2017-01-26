@@ -31,8 +31,8 @@ class CRM_Kavo_Worker_AccountWorker extends CRM_Kavo_Worker {
    * @param array $contact
    * @return CRM_Kavo_ValidationResult
    */
-  public function canCreate(array $contact) {
-    $result = parent::canCreate($contact);
+  public function validateKavo(array $contact) {
+    $result = parent::validateKavo($contact);
     if ($contact['contact_type'] != 'Individual') {
       $result->addStatus(CRM_Kavo_Error::WRONG_CONTACT_TYPE);
       $result->addMessage("Only individuals can get a KAVO-ID.\n");

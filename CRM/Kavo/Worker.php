@@ -91,7 +91,7 @@ abstract class CRM_Kavo_Worker {
    * @param array $civiEntity
    * @return \CRM_Kavo_ValidationResult
    */
-  public function canCreate(array $civiEntity) {
+  public function validateKavo(array $civiEntity) {
     $status = 0;
     $message = '';
     $kavoEntity = $this->mapToKavo($civiEntity);

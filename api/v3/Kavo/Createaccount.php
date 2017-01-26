@@ -51,7 +51,7 @@ function civicrm_api3_kavo_Createaccount($params) {
   $worker = new CRM_Kavo_Worker_AccountWorker();
 
   $contact = $worker->get($params['contact_id']);
-  $validationResult = $worker->canCreate($contact);
+  $validationResult = $worker->validateKavo($contact);
   if ($validationResult->status != CRM_Kavo_Error::OK) {
     throw new API_Exception($validationResult->message, $validationResult->status, [
       'missing' => $validationResult->extra
