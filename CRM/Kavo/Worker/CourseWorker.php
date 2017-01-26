@@ -18,7 +18,7 @@
  */
 
 /**
- * KAVO course logic.
+ * Data access to CiviCRM events, validation, and mapping to KAVO courses.
  */
 class CRM_Kavo_Worker_CourseWorker extends CRM_Kavo_Worker {
   public function __construct() {
@@ -80,16 +80,6 @@ class CRM_Kavo_Worker_CourseWorker extends CRM_Kavo_Worker {
    */
   protected function getCiviChainedRequests() {
     return [
-      // I fetch the price fields and the relevant price field values, but
-      // I don't know which price field to use for the participant price.
-      // (We call it 'deelnameprijs', but this should be configurable.)
-      'api.PriceField.get' => [
-        'price_set_id' => '$value.price_set_id',
-        // Because this is not configurable (yet?), I will use a custom field
-        // for participant price.
-        'name' => 'deelnameprijs',
-        'api.PriceFieldValue.get' => ['is_default' => 1]
-      ],
       'api.Contact.getsingle' => [
         'id' => '$value.' . CRM_Kavo_Field::RESPONSIBLE_CONTACT_ID() . '_id',
         'return' => ['first_name', 'last_name', 'email', 'phone'],
