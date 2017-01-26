@@ -53,9 +53,7 @@ function civicrm_api3_kavo_Createaccount($params) {
   $contact = $worker->get($params['contact_id']);
   $validationResult = $worker->validateKavo($contact);
   if ($validationResult->status != CRM_Kavo_Error::OK) {
-    throw new API_Exception($validationResult->message, $validationResult->status, [
-      'missing' => $validationResult->extra
-    ]);
+    throw new API_Exception($validationResult->message, $validationResult->status, $validationResult->extra);
   }
   // TODO: maybe create a add hook to get old_certificate and old_certificate_number.
 

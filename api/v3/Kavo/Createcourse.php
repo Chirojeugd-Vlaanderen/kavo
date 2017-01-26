@@ -50,9 +50,7 @@ function civicrm_api3_kavo_Createcourse($params) {
   $event = $worker->get($params['event_id']);
   $validationResult = $worker->validateKavo($event);
   if ($validationResult->status != CRM_Kavo_Error::OK) {
-    throw new API_Exception($validationResult->message, $validationResult->status, [
-      'missing' => $validationResult->extra
-    ]);
+    throw new API_Exception($validationResult->message, $validationResult->status, $validationResult->extra);
   }
 
   try {
