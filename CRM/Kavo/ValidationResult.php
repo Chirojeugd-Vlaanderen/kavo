@@ -58,6 +58,6 @@ class CRM_Kavo_ValidationResult {
    * @param string $message Text to append to the message.
    */
   public function addMessage($message) {
-    $this->message .= $message;
+    $this->message .= $message . "\n";
   }
 }

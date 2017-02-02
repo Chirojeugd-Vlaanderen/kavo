@@ -23,6 +23,13 @@
 class CRM_Kavo_Worker_ParticipantWorker extends CRM_Kavo_Worker {
 
   /**
+   * CRM_Kavo_Worker_ParticipantWorker constructor.
+   */
+  public function __construct() {
+    parent::__construct('Participant');
+  }
+
+  /**
    * Returns the required fields for a new entity in the kavo tool.
    *
    * @return array
@@ -99,7 +106,7 @@ class CRM_Kavo_Worker_ParticipantWorker extends CRM_Kavo_Worker {
       return $result;
     }
 
-    if (empty($civiEntity[CRM_Kavo_Field::ACKNOWLEDGEMENT_TYPE()])) {
+    if (empty($event[CRM_Kavo_Field::ACKNOWLEDGEMENT_TYPE()])) {
       // We don't care if there is no acknowledgement type.
       return $result;
     }
@@ -137,7 +144,7 @@ class CRM_Kavo_Worker_ParticipantWorker extends CRM_Kavo_Worker {
       $minAge = $ageRestriction[$event[CRM_Kavo_Field::ACKNOWLEDGEMENT_TYPE()]];
       if ($age < $minAge) {
         $result->addStatus(CRM_Kavo_Error::PARTICIPANT_TOO_YOUNG);
-        $result->addMessage("Participant too young; born after " . $yearOfEvent - $minAge . ".\n" );
+        $result->addMessage("Participant too young; born after " . ($yearOfEvent - $minAge) . ".\n" );
         $result->extra = ['ageLimit' => $minAge];
       }
     }
@@ -167,11 +174,11 @@ class CRM_Kavo_Worker_ParticipantWorker extends CRM_Kavo_Worker {
       'contact_id' => $contactId,
       'event_id' => $eventId,
       'role_id' => $roleId,
-      'api.Contact.get' => civicrm_api3('Contact', 'get', [
+      'api.Contact.getsingle' => civicrm_api3('Contact', 'getsingle', [
         'id' => $contactId,
-        'return' => [CRM_Kavo_Field::KAVO_ID()],
+        'return' => ['birth_date', CRM_Kavo_Field::KAVO_ID()],
       ]),
-      'api.Event.get' => civicrm_api3('Event', 'get', [
+      'api.Event.getsingle' => civicrm_api3('Event', 'getsingle', [
         'id' => $eventId,
         'return' => [
           CRM_Kavo_Field::COURSE_ID(),

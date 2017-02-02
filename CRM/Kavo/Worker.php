@@ -132,6 +132,6 @@ abstract class CRM_Kavo_Worker {
    */
   protected function extractYear($civiDate) {
     $date = date_parse($civiDate);
-    return $date ? intval(date['year']) : NULL;
+    return $date ? intval($date['year']) : NULL;
   }
 }
