@@ -44,7 +44,8 @@ function _civicrm_api3_kavo_Gettraject_spec(&$spec) {
  */
 function civicrm_api3_kavo_Gettraject($params) {
   $kavo = new CRM_Kavo_KavoTool();
-  $result = $kavo->getTraject($params['kavo_id']);
+  // hackity hackity
+  $result = json_decode(json_encode($kavo->getTraject($params['kavo_id'])), TRUE);
   return civicrm_api3_create_success($result, 'Kavo', 'gettraject');
 }
 
