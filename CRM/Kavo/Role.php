@@ -26,6 +26,6 @@ class CRM_Kavo_Role {
     // FIX ME: make this configurable.
     // We are not sure if every CiviCRM instance has a participant role with
     // name 'Attendee'.
-    return CRM_IdCache_Cache_OptionValue::getValue('participant_role', 'Attendee');
+    return CRM_IdCache_Cache_OptionValue::getValue('Attendee', 'participant_role');
   }
 }
