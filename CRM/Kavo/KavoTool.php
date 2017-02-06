@@ -163,4 +163,15 @@ class CRM_Kavo_KavoTool implements CRM_Kavo_KavoInterface {
     $result = $this->callApi('courses', $course, $this->getToken(), 'POST');
     return $result->data->course_id;
   }
+
+  /**
+   * View participant traject.
+   *
+   * @param string $kavoId
+   * @return mixed
+   */
+  public function getTraject($kavoId) {
+    $result = $this->callApi("participant/$kavoId/traject", [], $this->getToken(), 'GET');
+    return $result->data;
+  }
 }

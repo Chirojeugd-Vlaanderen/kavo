@@ -148,6 +148,7 @@ class CRM_Kavo_Worker_ParticipantWorker extends CRM_Kavo_Worker {
         $result->extra = ['ageLimit' => $minAge];
       }
     }
+
     return $result;
   }
 

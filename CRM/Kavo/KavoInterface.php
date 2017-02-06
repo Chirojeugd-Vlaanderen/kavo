@@ -69,4 +69,12 @@ interface CRM_Kavo_KavoInterface {
    * @return string course ID
    */
   public function createCourse(array $course);
+
+  /**
+   * View participant traject.
+   *
+   * @param string $kavoId
+   * @return mixed
+   */
+  public function getTraject($kavoId);
 }

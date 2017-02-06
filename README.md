@@ -56,15 +56,27 @@ you might want to provide a custom template for `templates/CRM/Event/Form/Manage
 
 ## api examples
 
-The KAVO-API will be accessable via the CiviCRM API. Some examples with drush:
+The KAVO-API will be accessable via the CiviCRM API. 
 
+The API actions expects 'kavo params' as opposed to 'normal'
+CiviCRM API actions, that expect 'CiviCRM params'. So e.g. you
+need to provide kavo_id's instead of contact_id's. Not sure
+if that was the best decision. But for the moment I keep it
+as it is.
+
+Some examples with drush:
+
+    drush cvapi Kavo.hello
     drush cvapi Kavo.createaccount contact_id=204
     drush cvapi Kavo.createevent event_id=2
+    drush cvapi Kavo.gettraject kavo_id=125143-59
 
 Or in php:
 
+    civicrm_api3('Kavo', 'hello');
     civicrm_api3('Kavo', 'createaccount', ['contact_id' => 204]);
     civicrm_api3('Kavo', 'createevent', ['event_id' => 2]);
+    civicrm_api3('Kavo', 'gettraject', ['kavo_id' => '125143-59']);
 
 ## source code structure
 
