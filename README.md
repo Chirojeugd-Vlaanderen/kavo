@@ -20,11 +20,12 @@ of this writing (2016-11-28), you need the version from git.
 
 So install those before you install the kavo extension.
 
-The KAVO-API wants a distinct street name and number in the event location. I pass street_name and street_number
-to the API, but I think that standard CiviCRM stores the street address in street_address, and leaves street_name
-and street_number empty. So in that case, creating new courses will fail. (See issue #7.)
-
-I will ask the KAVO-people to make the API accept street name and number in one field.
+The KAVO-API wants a distinct street name and number in the event location. I pass street_name, street_number
+and street_numbers_suffix to the API, but standard CiviCRM stores the street address in street_address, 
+and leaves street_name and street_number empty. 
+I think the proper way to handle this, is enabling street address parsing, and using the
+[streetformatnl extension](https://github.com/CiviCooP/org.civicoop.streetformatnl) to get the parsing
+right for Dutch and Belgian addresses. (See issue #7.)
 
 ## configuration
 
