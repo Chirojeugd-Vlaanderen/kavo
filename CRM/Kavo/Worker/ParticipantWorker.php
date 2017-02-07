@@ -89,7 +89,8 @@ class CRM_Kavo_Worker_ParticipantWorker extends CRM_Kavo_Worker {
   }
 
   /**
-   * Checks whether the given participant can be used to create a KAVO participant.
+   * Checks whether the given CiviCRM-participant can be used to create a KAVO
+   * participant.
    *
    * @param array $civiEntity a CiviCRM participant.
    * @return \CRM_Kavo_ValidationResult
@@ -144,13 +145,38 @@ class CRM_Kavo_Worker_ParticipantWorker extends CRM_Kavo_Worker {
       $minAge = $ageRestriction[$event[CRM_Kavo_Field::ACKNOWLEDGEMENT_TYPE()]];
       if ($age < $minAge) {
         $result->addStatus(CRM_Kavo_Error::PARTICIPANT_TOO_YOUNG);
-        $result->addMessage("Participant too young; born after " . ($yearOfEvent - $minAge) . ".\n" );
+        $result->addMessage("Participant too young; born after " . ($yearOfEvent - $minAge) . ".\n");
         $result->extra = ['ageLimit' => $minAge];
       }
     }
 
+    // For the moment we use the same criteria for hoofdanimator and
+    // instructeur, which might not be 100% correct. But it is unclear
+    // for everybody anyway ;-)
+    switch ($event[CRM_Kavo_Field::ACKNOWLEDGEMENT_TYPE()]) {
+      case "hoofdanimator":
+      case "instructeur":
+        // if you are a certified animator, everything's fine.
+        if (!$this->isCertified($civiEntity, 'animator')) {
+          // Otherwise we assume by default that you have the required
+          // experience.
+          $experience = 1;
+          // But you can override this by implementing hook_kavo_experience.
+          CRM_Utils_Hook::singleton()->invoke(2, $experience,
+            $contact['id'], CRM_Utils_Hook::$_nullObject,
+            CRM_Utils_Hook::$_nullObject, CRM_Utils_Hook::$_nullObject,
+            CRM_Utils_Hook::$_nullObject, 'kavo_experience');
+          if (!$experience) {
+            $result->addStatus(CRM_Kavo_Error::PARTICIPANT_LACKS_EXPERIENCE);
+            $result->addMessage("A year of experience as leader is required.\n");
+          }
+        }
+        break;
+    }
+
     return $result;
   }
+
 
   /**
    * Creates a CiviCRM participant to be used with this worker. Does not save.
@@ -189,5 +215,19 @@ class CRM_Kavo_Worker_ParticipantWorker extends CRM_Kavo_Worker {
       ]),
     ];
     return $result;
+  }
+
+  /**
+   * Checks in the KAVO-tool whether the participant $civiParticipant is animator.
+   * @param array $civiParticipant
+   * @param string $acknowledgement animator, hoofdanimator, instructeur
+   * @return bool
+   */
+  public function isCertified(array $civiParticipant, $acknowledgement) {
+    $result = civicrm_api3('Kavo', 'gettraject', [
+      // TODO: Find a better way to get kavo_id of participant.
+      'kavo_id' => $civiParticipant['api.Contact.getsingle'][CRM_Kavo_Field::KAVO_ID()],
+    ]);
+    return $result['values'][$acknowledgement]['certification'];
   }
 }

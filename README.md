@@ -39,6 +39,10 @@ Add these two lines to your `civicrm.config.php` file:
 Of course, you use your own key and secret. And change the endpoint if you want to connect to the real KAVO tool
 instead of the test.
 
+The way to determine whether a contact has enough experience for hoofdanimator/instructeur is probably different in 
+every single CiviCRM instance. So you have to define it yourself, by implementing 
+`hook_kavo_experience(&$hasExperience, $contact_id)`.
+
 ## create a KAVO-ID
 
 On a contact summary page, you can click 'Actions', 'Generate KAVO-ID'. This creates a

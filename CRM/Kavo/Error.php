@@ -29,5 +29,6 @@ class CRM_Kavo_Error {
   const RESPONSIBLE_MISSING = 16;
   const ADDRESS_MISSING = 32;
   const PARTICIPANT_TOO_YOUNG = 64;
+  const PARTICIPANT_LACKS_EXPERIENCE = 128;
   const UNKNOWN = 65536;
 }

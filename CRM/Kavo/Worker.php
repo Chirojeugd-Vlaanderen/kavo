@@ -100,7 +100,7 @@ abstract class CRM_Kavo_Worker {
       $status |= CRM_Kavo_Error::REQUIRED_FIELDS_MISSING;
       $message .= "Required fields missing: " . implode(', ', $missing) . "\n";
     }
-    return new CRM_Kavo_ValidationResult($status, $message, ['missing' => $missing]);
+    return new CRM_Kavo_ValidationResult($status, $message, empty($missing) ? [] : ['missing' => $missing]);
   }
 
   /**

@@ -52,8 +52,8 @@ function _civicrm_api3_kavo_Validateparticipant_spec(&$spec) {
 function civicrm_api3_kavo_Validateparticipant($params) {
   $worker = new CRM_Kavo_Worker_ParticipantWorker();
   // TODO: handle $params['contact_id'] = ['in' => [/*array*/]].
-  $participant = $worker->create($params['contact_id'], $params['event_id'], $params['role_id']);
-  $validationResult = $worker->validateKavo($participant);
+  $civiParticipant = $worker->create($params['contact_id'], $params['event_id'], $params['role_id']);
+  $validationResult = $worker->validateKavo($civiParticipant);
   return civicrm_api3_create_success((array)$validationResult, 'Kavo', 'validateparticipant');
 }
 
