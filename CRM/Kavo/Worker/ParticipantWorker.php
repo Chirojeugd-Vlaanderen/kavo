@@ -162,8 +162,8 @@ class CRM_Kavo_Worker_ParticipantWorker extends CRM_Kavo_Worker {
           // experience.
           $experience = 1;
           // But you can override this by implementing hook_kavo_experience.
-          CRM_Utils_Hook::singleton()->invoke(2, $experience,
-            $contact['id'], CRM_Utils_Hook::$_nullObject,
+          CRM_Utils_Hook::singleton()->invoke(3, $experience,
+            $contact['id'], DateTime::createFromFormat('Y-m-d H:i:s', $event['start_date']),
             CRM_Utils_Hook::$_nullObject, CRM_Utils_Hook::$_nullObject,
             CRM_Utils_Hook::$_nullObject, 'kavo_experience');
           if (!$experience) {
