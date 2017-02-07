@@ -41,7 +41,7 @@ instead of the test.
 
 The way to determine whether a contact has enough experience for hoofdanimator/instructeur is probably different in 
 every single CiviCRM instance. So you have to define it yourself, by implementing 
-`hook_kavo_experience(&$hasExperience, $contactId, DateTime $startDate)`.
+`hook_kavo_experience(&$hasExperience, $contactId, DateTimeImmutable $startDate)`.
 
 ## create a KAVO-ID
 
