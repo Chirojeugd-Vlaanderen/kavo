@@ -59,6 +59,20 @@ You can do this from the event dashboard, or from the 'manage events' form as we
 page used to edit the event info and settings, because this does not seem to be customizable. If you want to do this,
 you might want to provide a custom template for `templates/CRM/Event/Form/ManageEvent/Tab.tpl`.
 
+## check whether a participant can subscribe to a course
+
+There is API support for this:
+
+
+    civicrm_api3('Kavo', 'validateparticipant', ['event_id' => 2, 'contact_id' => 3, 'role_id' => 1]);
+    
+This only works if the attendants have participant role 'Attendee'. If your participants
+have a role with a different name, you should configure this in the CiviCRM settings,
+e.g. by adding the following to `civicrm.settings.php`:
+
+    $civicrm_setting['kavo']['kavo_participant_role_name'] = 'deelnemer';
+
+
 ## api examples
 
 The KAVO-API will be accessable via the CiviCRM API. 

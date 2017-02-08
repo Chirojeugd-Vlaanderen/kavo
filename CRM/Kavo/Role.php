@@ -23,9 +23,11 @@
  */
 class CRM_Kavo_Role {
   static function ATTENDEE() {
-    // FIX ME: make this configurable.
-    // We are not sure if every CiviCRM instance has a participant role with
-    // name 'Attendee'.
-    return CRM_IdCache_Cache_OptionValue::getValue('Attendee', 'participant_role');
+    $participantRoleName = CRM_Core_BAO_Setting::getItem('kavo', 'kavo_participant_role_name');
+    if (empty($participantRoleName)) {
+      // Default is 'Attendee'
+      $participantRoleName = 'Attendee';
+    }
+    return CRM_IdCache_Cache_OptionValue::getValue($participantRoleName, 'participant_role');
   }
 }
