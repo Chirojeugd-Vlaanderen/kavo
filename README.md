@@ -43,6 +43,11 @@ The way to determine whether a contact has enough experience for hoofdanimator/i
 every single CiviCRM instance. So you have to define it yourself, by implementing 
 `hook_kavo_experience(&$hasExperience, $contactId, DateTimeImmutable $startDate)`.
 
+## permissions
+
+This extension creates two new permissions: 'access KAVO' and 'update KAVO'. Please grant
+those to the roles of the users that need to use the API.
+
 ## create a KAVO-ID
 
 On a contact summary page, you can click 'Actions', 'Generate KAVO-ID'. This creates a
