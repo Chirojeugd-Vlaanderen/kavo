@@ -185,6 +185,55 @@ function kavo_civicrm_tabset($tabsetName, &$tabs, $context) {
 }
 
 /**
+ * Implements hook_civicrm_permission.
+ *
+ * @param array $permissions
+ */
+function kavo_civicrm_permission(&$permissions) {
+  $permissions['access KAVO'] = [
+    ts('KAVO: Access KAVO-API'),
+    ts('Retrieve data from the KAVO-API'),
+  ];
+  $permissions['update KAVO'] = [
+    ts('KAVO: Register KAVO-information'),
+    ts('Send data to the KAVO-API'),
+  ];
+}
+
+function kavo_civicrm_alterAPIPermissions($entity, $action, &$params, &$permissions) {
+  $permissions['kavo']['authenticate'] = ['access KAVO'];
+  $permissions['kavo']['hello'] = ['access KAVO'];
+  // I'm not sure whether the 'access all custom data' permission
+  // is really necessary.
+  $permissions['kavo']['createaccount'] = [
+    'access KAVO',
+    'update KAVO',
+    'view all contacts',
+    'edit all contacts',
+    'access all custom data',
+  ];
+  $permissions['kavo']['createcourse'] = [
+    'access KAVO',
+    'update KAVO',
+    'view all contacts',
+    'view event info',
+    'edit all events',
+    'access all custom data',
+  ];
+  $permissions['kavo']['gettraject'] = [
+    'access KAVO',
+    'view all contacts',
+    'access all custom data'
+  ];
+  $permissions['kavo']['validateparticipant'] = [
+    'access KAVO',
+    'view all contacts',
+    'view event info',
+    'access all custom data',
+  ];
+}
+
+/**
  * Functions below this ship commented out. Uncomment as required.
  *
 
