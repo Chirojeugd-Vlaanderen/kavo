@@ -152,6 +152,56 @@ function kavo_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
 }
 
 /**
+ * Implements hook_civicrm_pre.
+ *
+ * @param $op
+ * @param $objectName
+ * @param $id
+ * @param $params
+ * @throws \Exception
+ */
+function kavo_civicrm_pre($op, $objectName, $id, &$params) {
+  if (($op == 'create' || $op == 'edit') && $objectName == 'Participant') {
+    // FIXME: Messy code
+    // $params can be incomplete. This mess fixes that first.
+    if (empty(CRM_Core_BAO_Setting::getItem('kavo', 'kavo_enforce'))) {
+      // Only enforce KAVO requirements if kavo_enforce is set.
+      return;
+    }
+    $worker = new CRM_Kavo_Worker_ParticipantWorker();
+    if (empty($params['contact_id']) || empty($params['event_id']) || empty($params['role_id'])) {
+      // Only fetch existing when we are indeed updating an existing
+      // participant.
+      if (empty($params['id'])) {
+        // The params are invalid. But that's not a problem to be handled here.
+        return;
+      }
+      $existing = $worker->get($params['id']);
+    }
+
+    $contact_id = empty($params['contact_id']) ? $existing['contact_id']: $params['contact_id'];
+    $event_id = empty($params['event_id']) ? $existing['event_id']: $params['event_id'];
+    $role_id = empty($params['role_id']) ? $existing['role_id']: $params['role_id'];
+
+    // Now for the real thing:
+
+    $result = civicrm_api3('Kavo', 'validateparticipant', [
+      'contact_id' => $contact_id,
+      'event_id' => $event_id,
+      'role_id' => $role_id,
+    ]);
+
+    if (!empty($result['status'])) {
+      // According to the documentation, you cannot use hook_civicrm_pre to
+      // abort an operation:
+      // https://docs.civicrm.org/dev/en/master/hooks/hook_civicrm_pre/
+      // We do it anyway. :-P
+      throw new Exception($result['message'], $result['status']);
+    }
+  }
+}
+
+/**
  * Implements hook_civicrm_summaryActions.
  *
  * @param $actions
