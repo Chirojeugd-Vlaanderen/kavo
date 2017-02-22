@@ -43,6 +43,11 @@ The way to determine whether a contact has enough experience for hoofdanimator/i
 every single CiviCRM instance. So you have to define it yourself, by implementing 
 `hook_kavo_experience(&$hasExperience, $contactId, DateTimeImmutable $startDate)`.
 
+If you want participant registrations to fail when the KAVO requirements are not met, add this to our
+config:
+
+    $civicrm_settnigs['kavo']['kavo_enforce'] = TRUE;
+
 ## permissions
 
 This extension creates two new permissions: 'access KAVO' and 'update KAVO'. Please grant
