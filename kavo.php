@@ -202,6 +202,51 @@ function kavo_civicrm_pre($op, $objectName, $id, &$params) {
 }
 
 /**
+ * Implements hook_civicrm_validateForm().
+ *
+ * @param $formName
+ * @param $fields
+ * @param $files
+ * @param $form
+ * @param $errors
+ */
+function kavo_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
+  if ($formName == 'CRM_Event_Form_Participant') {
+    if (empty(CRM_Core_BAO_Setting::getItem('kavo', 'kavo_enforce'))) {
+      // Only enforce KAVO requirements if kavo_enforce is set.
+      return;
+    }
+
+    // Why o why is role_id an array?
+    $roleId = CRM_Utils_Array::first($fields['role_id']);
+    $eventId = $fields['event_id'];
+    $contactId = $form->_contactId;
+
+    $result = civicrm_api3('Kavo', 'validateparticipant', [
+      'contact_id' => $contactId,
+      'event_id' => $eventId,
+      'role_id' => $roleId,
+    ]);
+
+    if (!empty($result['values']['status'])) {
+      $code = $result['values']['status'];
+      $error = ts("KAVO error. ");
+      // FIXME: code smell.
+      foreach (CRM_Kavo_Helper::getBits($code) as $errorCode) {
+        if ($errorCode == CRM_Kavo_Error::REQUIRED_FIELDS_MISSING) {
+          $error .= ts(CRM_Kavo_Error::$messages[$errorCode])
+            . ": " . implode(', ', $result['values']['extra']['missing']) . ". ";
+        }
+        else {
+          $error .= ts(CRM_Kavo_Error::$messages[$errorCode]) . ". ";
+        }
+      }
+      $errors['event_id'] = $error;
+    }
+  }
+}
+
+/**
  * Implements hook_civicrm_summaryActions.
  *
  * @param $actions

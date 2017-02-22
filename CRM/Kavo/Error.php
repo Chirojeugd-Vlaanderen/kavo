@@ -33,5 +33,20 @@ class CRM_Kavo_Error {
   const PARTICIPANT_TOO_YOUNG = 64;
   const PARTICIPANT_LACKS_EXPERIENCE = 128;
   const API_NOT_CONFIGURED = 32768;
-  const UNKNOWN = 65536;
+  const UNKNOWN = 65563;
+
+  // Untranslated error messages:
+  public static $messages = [
+    self::OK => 'Ok',
+    self::REQUIRED_FIELDS_MISSING => 'Required fields missing',
+    self::WRONG_CONTACT_TYPE => 'Wrong contact type',
+    self::ALREADY_REGISTERED => 'Already registered',
+    self::EMAIL_TAKEN => 'Email taken',
+    self::RESPONSIBLE_MISSING => 'Responsible missing',
+    self::ADDRESS_MISSING => 'Address missing',
+    self::PARTICIPANT_TOO_YOUNG => 'Participant too young',
+    self::PARTICIPANT_LACKS_EXPERIENCE => 'Participant lacks experience',
+    self::API_NOT_CONFIGURED => 'API not configured',
+    self::UNKNOWN => 'Unknown error',
+    ];
 }
