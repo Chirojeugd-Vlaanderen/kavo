@@ -146,8 +146,16 @@ class CRM_Kavo_Worker_ParticipantWorker extends CRM_Kavo_Worker {
       if ($age < $minAge) {
         $result->addStatus(CRM_Kavo_Error::PARTICIPANT_TOO_YOUNG);
         $result->addMessage("Participant too young; born after " . ($yearOfEvent - $minAge) . ".\n");
-        $result->extra = ['ageLimit' => $minAge];
+        $result->extra['ageLimit'] = $minAge;
       }
+    }
+
+    $result->extra['missing'] = array_unique($result->extra['missing']);
+
+    if (!empty($result->status)) {
+      // If we have errors here, we return. Because the checks below can
+      // fail if e.g. the contact doesn't have a KAVO-id.
+      return $result;
     }
 
     // For the moment we use the same criteria for hoofdanimator and
