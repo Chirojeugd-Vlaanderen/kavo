@@ -104,7 +104,13 @@ class CRM_Kavo_Form_Controller extends CRM_Core_Form {
       $extraParams = $ex->getExtraParams();
       $codes = $this->getIndividualErrorCodes($extraParams['error_code']);
       $this->assign('codes', $codes);
-      $this->assign('missing', $extraParams['missing']);
+      if (!empty($extraParams['missing'])) {
+        $this->assign('missing', $extraParams['missing']);
+      }
+      if (in_array(CRM_Kavo_Error::UNKNOWN, $codes))
+      {
+        $this->assign('error_message', $extraParams['error_message']);
+      }
     }
   }
 

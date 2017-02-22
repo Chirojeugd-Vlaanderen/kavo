@@ -55,7 +55,7 @@ class CRM_Kavo_KavoTool implements CRM_Kavo_KavoInterface {
     // FIXME: This looks rather messy.
     $endpoint = CRM_Core_BAO_Setting::getItem('kavo', 'kavo_endpoint');
     if (empty($endpoint)) {
-      throw new Exception('KAVO endpoint not configured.');
+      throw new Exception('KAVO endpoint not configured.', CRM_Kavo_Error::API_NOT_CONFIGURED);
     }
     $endpoint .= "/${resource}";
     $curl = curl_init();

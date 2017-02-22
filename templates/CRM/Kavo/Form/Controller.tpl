@@ -44,8 +44,17 @@
                 {if $code == 32}
                     {ts}The course should have a location with an address.{/ts}
                 {/if}
+                {if $code == 64}
+                    {ts}Participant is too young.{/ts}
+                {/if}
                 {if $code == 128}
-                    {ts}The KAVO API returned an unexpected result.{/ts}
+                    {ts}Participant lacks experience.{/ts}
+                {/if}
+                {if $code == 32768}
+                    {ts}KAVO API unconfigured.{/ts}
+                {/if}
+                {if $code == 65536}
+                    {ts}The KAVO API returned an unexpected result:{/ts} {$error_message}
                 {/if}
             </li>
         {/foreach}

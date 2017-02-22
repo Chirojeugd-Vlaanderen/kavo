@@ -17,8 +17,10 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// NOTE: These codes should be the same as in
+// templates/CRM/Kavo/Form/Controller.tpl.
 /**
- * Error codes used by the kavo extension
+ * Error codes used by the kavo extension.
  */
 class CRM_Kavo_Error {
   const OK = 0;
@@ -30,5 +32,6 @@ class CRM_Kavo_Error {
   const ADDRESS_MISSING = 32;
   const PARTICIPANT_TOO_YOUNG = 64;
   const PARTICIPANT_LACKS_EXPERIENCE = 128;
+  const API_NOT_CONFIGURED = 32768;
   const UNKNOWN = 65536;
 }
