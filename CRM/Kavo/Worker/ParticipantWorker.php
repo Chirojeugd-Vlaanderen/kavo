@@ -150,7 +150,9 @@ class CRM_Kavo_Worker_ParticipantWorker extends CRM_Kavo_Worker {
       }
     }
 
-    $result->extra['missing'] = array_unique($result->extra['missing']);
+    if (!empty($result->extra['missing'])) {
+      $result->extra['missing'] = array_unique($result->extra['missing']);
+    }
 
     if (!empty($result->status)) {
       // If we have errors here, we return. Because the checks below can
