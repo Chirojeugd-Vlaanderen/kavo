@@ -32,7 +32,11 @@ function _civicrm_api3_kavo_Validateparticipant_spec(&$spec) {
   ];
   $spec['contact_id'] = [
     'type' => CRM_Utils_Type::T_INT,
-    'api.required' => 1,
+    'api.required' => 0,
+  ];
+  $spec['external_identifier'] = [
+    'type' => CRM_Utils_Type::T_STRING,
+    'api.required' => 0,
   ];
   $spec['role_id'] = [
     'type' => CRM_Utils_Type::T_INT,
@@ -50,7 +54,19 @@ function _civicrm_api3_kavo_Validateparticipant_spec(&$spec) {
  * @throws API_Exception
  */
 function civicrm_api3_kavo_Validateparticipant($params) {
+  if (empty($params['contact_id']) && empty($params['external_identifier'])) {
+    throw new API_Exception('contact_id or external_identifier is required.');
+  }
   $worker = new CRM_Kavo_Worker_ParticipantWorker();
+
+  if (empty($params['contact_id'])) {
+    // FIXME: this looks ugly.
+    $getResult = civicrm_api3('Contact', 'getsingle', [
+      'external_identifier' => $params['external_identifier'],
+    ]);
+    $params['contact_id'] = $getResult['id'];
+  }
+
   // TODO: handle $params['contact_id'] = ['in' => [/*array*/]].
   $civiParticipant = $worker->create($params['contact_id'], $params['event_id'], $params['role_id']);
   $validationResult = $worker->validateKavo($civiParticipant);
