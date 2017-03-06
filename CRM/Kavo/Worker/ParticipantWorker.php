@@ -98,19 +98,20 @@ class CRM_Kavo_Worker_ParticipantWorker extends CRM_Kavo_Worker {
    */
   public function validateKavo(array $civiEntity) {
     // TODO: split function
-    $result = parent::validateKavo($civiEntity);
     $contact = $civiEntity['api.Contact.getsingle'];
     $event = $civiEntity['api.Event.getsingle'];
+    $result = new CRM_Kavo_ValidationResult(0, 'OK', []);
 
     if ($civiEntity['role_id'] != CRM_Kavo_Role::ATTENDEE()) {
       // We only care about attendees atm.
       return $result;
     }
-
-    if (empty($event[CRM_Kavo_Field::ACKNOWLEDGEMENT_TYPE()])) {
-      // We don't care if there is no acknowledgement type.
+    if (!$this->isKavoCourse($event)) {
+      // We don't care if the event is not a KAVO course.
       return $result;
     }
+
+    $result = parent::validateKavo($civiEntity);
 
     if (empty($contact[CRM_Kavo_Field::KAVO_ID()])) {
       $result->addStatus(CRM_Kavo_Error::REQUIRED_FIELDS_MISSING);
@@ -239,5 +240,15 @@ class CRM_Kavo_Worker_ParticipantWorker extends CRM_Kavo_Worker {
       'kavo_id' => $civiParticipant['api.Contact.getsingle'][CRM_Kavo_Field::KAVO_ID()],
     ]);
     return $result['values'][$acknowledgement]['certification'];
+  }
+
+  /**
+   * Returns TRUE if the given $civiEvent is a KAVO course.
+   *
+   * @param array $civiEvent
+   * @return bool
+   */
+  public function isKavoCourse(array $civiEvent) {
+    return !empty($civiEvent[CRM_Kavo_Field::COURSE_ID()]);
   }
 }
