@@ -222,7 +222,13 @@ function kavo_civicrm_validateForm($formName, &$fields, &$files, &$form, &$error
     // Why o why is role_id an array?
     $roleId = CRM_Utils_Array::first($fields['role_id']);
     $eventId = $fields['event_id'];
+
+    // I'm not sure where to get the contact ID. Depending on the use case,
+    // it 's in $form or in $fields. X-(
     $contactId = $form->_contactId;
+    if (empty($contactId)) {
+      $contactId = $fields['contact_id'];
+    }
 
     $result = civicrm_api3('Kavo', 'validateparticipant', [
       'contact_id' => $contactId,
