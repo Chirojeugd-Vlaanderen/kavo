@@ -161,7 +161,9 @@ function kavo_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
  * @throws \Exception
  */
 function kavo_civicrm_pre($op, $objectName, $id, &$params) {
-  if (($op == 'create' || $op == 'edit') && $objectName == 'Participant') {
+  // Don't fire the chekcs on edit, because participants might have been
+  // created before the extension was not enabled (see #27)
+  if (($op == 'create') && $objectName == 'Participant') {
     // FIXME: Messy code
     // $params can be incomplete. This mess fixes that first.
     if (empty(CRM_Core_BAO_Setting::getItem('kavo', 'kavo_enforce'))) {
