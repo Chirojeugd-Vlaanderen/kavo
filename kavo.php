@@ -219,6 +219,11 @@ function kavo_civicrm_validateForm($formName, &$fields, &$files, &$form, &$error
       return;
     }
 
+    if (!empty($form->_id)) {
+      // Leave existing participants alone, #27
+      return;
+    }
+
     // Why o why is role_id an array?
     $roleId = CRM_Utils_Array::first($fields['role_id']);
     $eventId = $fields['event_id'];
