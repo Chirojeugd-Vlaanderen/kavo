@@ -46,7 +46,7 @@ every single CiviCRM instance. So you have to define it yourself, by implementin
 If you want participant registrations to fail when the KAVO requirements are not met, add this to our
 config:
 
-    $civicrm_settnigs['kavo']['kavo_enforce'] = TRUE;
+    $civicrm_settings['kavo']['kavo_enforce'] = TRUE;
 
 ## permissions
 
