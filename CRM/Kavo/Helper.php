@@ -44,13 +44,15 @@ class CRM_Kavo_Helper {
   }
 
   /**
-   * Returns an untranslated error message for a given error code.
+   * Returns TRUE if $item is empty, or the literal string 'null'.
    *
-   * @param $code
+   * (because CiviCRM seems to use the string 'null' for null values sometimes.
+   * https://issues.civicrm.org/jira/browse/CRM-11819)
+   *
+   * @param $item
+   * @return bool
    */
-  public static function getErrorMessage($code) {
-    switch (code) {
-
-    }
+  public static function civiNullOrEmpty($item) {
+    return empty($item) || $item == 'null';
   }
 }

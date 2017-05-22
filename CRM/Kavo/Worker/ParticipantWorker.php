@@ -42,6 +42,53 @@ class CRM_Kavo_Worker_ParticipantWorker extends CRM_Kavo_Worker {
   }
 
   /**
+   * Checks whether participant validation is required.
+   *
+   * @param $op - operation: 'create', 'view', 'edit', 'delete'
+   * @param array $params - the params as passed to hook_civicrm_pre.
+   * @return boolean
+   */
+  public function needsValidation($op, array $params) {
+    if ($op != 'create' && $op != 'edit') {
+      return FALSE;
+    }
+
+    // Don't require validation on update, because participants might have been
+    // created before the extension was enabled (see #27). Except when the
+    // status equals 'attended' (see #30).
+    // FIXME: if status_id equals 'attended', a check is only required when status_id changes.
+    return ($op == 'create' && !empty(Civi::settings()->get('kavo_enforce')))
+      || ($params['status_id'] == CRM_Kavo_Status::ATTENDED());
+  }
+
+  /**
+   * Returns contact_id, event_id and role_id for $participantParams.
+   *
+   * If the ID's are contained within $participantParams, return those ID's.
+   * If not, get them from the existing participant (if possible).
+   *
+   * @param array $participantParams - params as sent to hook_civicrm_pre
+   * @return array with keys contact_id, event_id, role_id.
+   */
+  public function getIds(array $participantParams) {
+    if (!CRM_Kavo_Helper::civiNullOrEmpty($participantParams['contact_id']) && !CRM_Kavo_Helper::civiNullOrEmpty($participantParams['event_id']) && !CRM_Kavo_Helper::civiNullOrEmpty($participantParams['role_id'])
+      || empty(participantParams['id'])) {
+      // If all ID's are already present, use the ID's from $participantParams.
+      // Also if no participant id is given, so that we can't retrieve existing
+      // values, return the ID's from $participantParams.
+      return array_intersect_key($participantParams, array_flip(['contact_id', 'event_id', 'role_id']));
+    }
+    $existing = $this->get($participantParams['id']);
+    $result = [];
+
+    $result['contact_id'] = empty($params['contact_id']) ? $existing['contact_id']: $params['contact_id'];
+    $result['event_id'] = empty($params['event_id']) ? $existing['event_id']: $params['event_id'];
+    $result['role_id'] = empty($params['role_id']) ? $existing['role_id']: $params['role_id'];
+
+    return $result;
+  }
+
+  /**
    * Returns the relevant fields for CiviCRM to return.
    *
    * @return array
@@ -83,9 +130,29 @@ class CRM_Kavo_Worker_ParticipantWorker extends CRM_Kavo_Worker {
    */
   public function mapToKavo(array $civiEntity) {
     return [
-      'kavo_id' => $civiEntity['api.Contact.getsingle'][CRM_Kavo_Field::KAVO_ID()],
-      'course_id' => $civiEntity['api.Event.getsingle'][CRM_Kavo_Field::COURSE_ID()],
+      'kavo_id' => $this->getContact($civiEntity)[CRM_Kavo_Field::KAVO_ID()],
+      'course_id' => $this->getCourse($civiEntity)[CRM_Kavo_Field::COURSE_ID()],
     ];
+  }
+
+  /**
+   * Returns the event of the CiviCRM participant API result.
+   *
+   * @param array $participant - participant as returned by $this->get().
+   * @return array
+   */
+  public function getCourse(array $participant) {
+    return $participant['api.Event.getsingle'];
+  }
+
+  /**
+   * Returns the contact of the CiviCRM participant API result.
+   *
+   * @param array $participant - participant as returned by $this->get().
+   * @return array
+   */
+  public function getContact(array $participant) {
+    return $participant['api.Contact.getsingle'];
   }
 
   /**
@@ -98,8 +165,8 @@ class CRM_Kavo_Worker_ParticipantWorker extends CRM_Kavo_Worker {
    */
   public function validateKavo(array $civiEntity) {
     // TODO: split function
-    $contact = $civiEntity['api.Contact.getsingle'];
-    $event = $civiEntity['api.Event.getsingle'];
+    $contact = $this->getContact($civiEntity);
+    $event = $this->getCourse($civiEntity);
     $result = new CRM_Kavo_ValidationResult(0, 'OK', []);
 
     if ($civiEntity['role_id'] != CRM_Kavo_Role::ATTENDEE()) {
@@ -237,7 +304,7 @@ class CRM_Kavo_Worker_ParticipantWorker extends CRM_Kavo_Worker {
   public function isCertified(array $civiParticipant, $acknowledgement) {
     $result = civicrm_api3('Kavo', 'gettraject', [
       // TODO: Find a better way to get kavo_id of participant.
-      'kavo_id' => $civiParticipant['api.Contact.getsingle'][CRM_Kavo_Field::KAVO_ID()],
+      'kavo_id' => $this->getContact($civiParticipant)[CRM_Kavo_Field::KAVO_ID()],
     ]);
     return $result['values'][$acknowledgement]['certification'];
   }
