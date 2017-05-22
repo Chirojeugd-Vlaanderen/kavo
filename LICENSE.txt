@@ -1,5 +1,5 @@
 Package: be.chiro.civi.kavo
-Copyright (C) 2016, FIXME <FIXME>
+Copyright (C) 2017, Chirojeugd Vlaanderen
 Licensed under the GNU Affero Public License 3.0 (below).
 
 -------------------------------------------------------------------------------
