@@ -32,6 +32,7 @@ class CRM_Kavo_Error {
   const ADDRESS_MISSING = 32;
   const PARTICIPANT_TOO_YOUNG = 64;
   const PARTICIPANT_LACKS_EXPERIENCE = 128;
+  const UNAUTHORIZED = 16384;
   const API_NOT_CONFIGURED = 32768;
   const UNKNOWN = 65536;
 
@@ -46,6 +47,7 @@ class CRM_Kavo_Error {
     self::ADDRESS_MISSING => 'Address missing',
     self::PARTICIPANT_TOO_YOUNG => 'Participant too young',
     self::PARTICIPANT_LACKS_EXPERIENCE => 'Participant lacks experience',
+    self::UNAUTHORIZED => 'KAVO-API: unauthorized',
     self::API_NOT_CONFIGURED => 'API not configured',
     self::UNKNOWN => 'Unknown error',
     ];

@@ -25,7 +25,9 @@
     <ul>
         {foreach from=$codes item=code}
             <li>
-                {* I wonder whether I could use the constants from CRM_Kavo_Error in this template *}
+                {* I wonder whether I could use the constants from CRM_Kavo_Error in this template.
+                   TODO: We could create a CiviCRM api method to return them, and call the CiviCRM
+                   API frmo within this template. I guess that should be doable. *}
                 {if $code == 1}
                     {ts}Some required contact fields are missing.{/ts}
                 {/if}
@@ -49,6 +51,9 @@
                 {/if}
                 {if $code == 128}
                     {ts}Participant lacks experience.{/ts}
+                {/if}
+                {if $code == 16384}
+                    {ts}KAVO-API: unauthorized.{/ts}
                 {/if}
                 {if $code == 32768}
                     {ts}KAVO API unconfigured.{/ts}

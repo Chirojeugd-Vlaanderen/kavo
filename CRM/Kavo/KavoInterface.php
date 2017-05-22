@@ -77,4 +77,14 @@ interface CRM_Kavo_KavoInterface {
    * @return mixed
    */
   public function getTraject($kavoId);
+
+  /**
+   * Participant - Join course.
+   *
+   * See https://cjsm.be/kavotest/docs/#api-Participant-JoinCourse
+   *
+   * @param $participant
+   * @return mixed
+   */
+  public function joinCourse($participant);
 }

@@ -83,6 +83,9 @@ class CRM_Kavo_KavoTool implements CRM_Kavo_KavoInterface {
     // TODO: Should I use a more specific exception type?
     $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
     if ($httpCode >= 400) {
+      if ($httpCode == KAVO_HTTP_UNAUTHORIZED) {
+        throw new Exception($result->message, CRM_Kavo_Error::UNAUTHORIZED);
+      }
       if ($httpCode == KAVO_HTTP_UNPROCESSABLE_ENTITY && isset($result->errors->email)) {
         throw new Exception($result->error->email, CRM_Kavo_Error::EMAIL_TAKEN);
       }
@@ -173,5 +176,16 @@ class CRM_Kavo_KavoTool implements CRM_Kavo_KavoInterface {
   public function getTraject($kavoId) {
     $result = $this->callApi("participant/$kavoId/traject", [], $this->getToken(), 'GET');
     return $result->data;
+  }
+
+  /**
+   * Saves a participant to mijnkadervorming.
+   *
+   * @param $participant - KAVO-participant (kavo_id and course_id).
+   * @return string 'success'.
+   */
+  public function joinCourse($participant) {
+    $result = $this->callApi("participant/join-course", $participant, $this->getToken(), 'POST');
+    return $result->message;
   }
 }

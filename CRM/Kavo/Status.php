@@ -1,7 +1,7 @@
 <?php
 /*
   be.chiro.civi.kavo - support for the KAVO-API.
-  Copyright (C) 2016  Chirojeugd-Vlaanderen vzw
+  Copyright (C) 2017  Chirojeugd-Vlaanderen vzw
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU Affero General Public License as
@@ -17,7 +17,12 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Hmmm... Wouldn't this be defined already somewhere?
-define('KAVO_HTTP_UNAUTHORIZED', 401);
-define('KAVO_HTTP_UNPROCESSABLE_ENTITY', 422);
 
+/**
+ * Returns participant status IDs.
+ */
+class CRM_Kavo_Status {
+  static function ATTENDED() {
+    return CRM_IdCache_Cache_Generic::getId('ParticipantStatusType', 'Attended');
+  }
+}
