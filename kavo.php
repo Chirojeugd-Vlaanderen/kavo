@@ -204,7 +204,13 @@ function kavo_civicrm_post($op, $objectName, $objectId, &$objectRef) {
         // TODO: prevent the participant from being registered twice.
         // Maybe create a custom field 'is_sent_to_kavo'.
         // Maybe we should use a queue for this?
-        civicrm_api3('Kavo', 'createparticipant', ['participant_id' => $objectId]);
+        try {
+          civicrm_api3('Kavo', 'createparticipant', ['participant_id' => $objectId]);
+        }
+        catch (CiviCRM_API3_Exception $ex) {
+          $contact = $worker->getContact($participant);
+          CRM_Core_Session::setStatus($ex->getMessage(), ts("Failed sending participant %1 to KAVO.", [1 => $contact['display_name']]), 'error');
+        }
       }
     }
   }
