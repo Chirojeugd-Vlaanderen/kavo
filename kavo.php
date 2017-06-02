@@ -200,7 +200,10 @@ function kavo_civicrm_post($op, $objectName, $objectId, &$objectRef) {
       // TODO: We need some decent dependency injection.
       $worker = new CRM_Kavo_Worker_ParticipantWorker();
       $participant = $worker->get($objectId);
-      if ($worker->isKavoCourse($worker->getCourse($participant))) {
+
+      // TODO: the check on participant_role_id should be done elsewhere
+      if ($participant['participant_role_id'] == CRM_Kavo_Role::ATTENDEE()
+        && $worker->isKavoCourse($worker->getCourse($participant))) {
         // TODO: prevent the participant from being registered twice.
         // Maybe create a custom field 'is_sent_to_kavo'.
         // Maybe we should use a queue for this?
