@@ -53,6 +53,7 @@ class CRM_Kavo_Helper {
    * @return bool
    */
   public static function civiNullOrEmpty($item) {
-    return empty($item) || $item == 'null';
+    $result = (empty($item) || $item == 'null');
+    return $result;
   }
 }

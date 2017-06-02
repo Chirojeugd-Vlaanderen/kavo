@@ -62,28 +62,30 @@ class CRM_Kavo_Worker_ParticipantWorker extends CRM_Kavo_Worker {
   }
 
   /**
-   * Returns contact_id, event_id and role_id for $participantParams.
+   * Returns contact_id, event_id and participant_role_id for $participantParams.
    *
    * If the ID's are contained within $participantParams, return those ID's.
    * If not, get them from the existing participant (if possible).
    *
    * @param array $participantParams - params as sent to hook_civicrm_pre
-   * @return array with keys contact_id, event_id, role_id.
+   * @return array with keys contact_id, event_id, participant_role_id.
    */
   public function getIds(array $participantParams) {
-    if (!CRM_Kavo_Helper::civiNullOrEmpty($participantParams['contact_id']) && !CRM_Kavo_Helper::civiNullOrEmpty($participantParams['event_id']) && !CRM_Kavo_Helper::civiNullOrEmpty($participantParams['role_id'])
-      || empty(participantParams['id'])) {
+    if (!CRM_Kavo_Helper::civiNullOrEmpty(CRM_Utils_Array::value('contact_id', $participantParams))
+      && !CRM_Kavo_Helper::civiNullOrEmpty(CRM_Utils_Array::value('event_id', $participantParams))
+      && !CRM_Kavo_Helper::civiNullOrEmpty(CRM_Utils_Array::value('participant_role_id', $participantParams))
+      || empty(CRM_Utils_Array::value('id', $participantParams))) {
       // If all ID's are already present, use the ID's from $participantParams.
       // Also if no participant id is given, so that we can't retrieve existing
       // values, return the ID's from $participantParams.
-      return array_intersect_key($participantParams, array_flip(['contact_id', 'event_id', 'role_id']));
+      return array_intersect_key($participantParams, array_flip(['contact_id', 'event_id', 'participant_role_id']));
     }
     $existing = $this->get($participantParams['id']);
     $result = [];
 
     $result['contact_id'] = empty($params['contact_id']) ? $existing['contact_id']: $params['contact_id'];
     $result['event_id'] = empty($params['event_id']) ? $existing['event_id']: $params['event_id'];
-    $result['role_id'] = empty($params['role_id']) ? $existing['role_id']: $params['role_id'];
+    $result['participant_role_id'] = empty($params['participant_role_id']) ? $existing['participant_role_id']: $params['participant_role_id'];
 
     return $result;
   }
@@ -97,6 +99,7 @@ class CRM_Kavo_Worker_ParticipantWorker extends CRM_Kavo_Worker {
     return [
       'contact_id',
       'event_id',
+      'participant_role_id',
     ];
   }
 
@@ -169,7 +172,7 @@ class CRM_Kavo_Worker_ParticipantWorker extends CRM_Kavo_Worker {
     $event = $this->getCourse($civiEntity);
     $result = new CRM_Kavo_ValidationResult(0, 'OK', []);
 
-    if ($civiEntity['role_id'] != CRM_Kavo_Role::ATTENDEE()) {
+    if ($civiEntity['participant_role_id'] != CRM_Kavo_Role::ATTENDEE()) {
       // We only care about attendees atm.
       return $result;
     }
@@ -278,7 +281,7 @@ class CRM_Kavo_Worker_ParticipantWorker extends CRM_Kavo_Worker {
     $result = [
       'contact_id' => $contactId,
       'event_id' => $eventId,
-      'role_id' => $roleId,
+      'participant_role_id' => $roleId,
       'api.Contact.getsingle' => civicrm_api3('Contact', 'getsingle', [
         'id' => $contactId,
         'return' => ['birth_date', CRM_Kavo_Field::KAVO_ID()],

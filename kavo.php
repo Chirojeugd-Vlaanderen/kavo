@@ -173,7 +173,7 @@ function kavo_civicrm_pre($op, $objectName, $id, &$params) {
     $result = civicrm_api3('Kavo', 'validateparticipant', [
       'contact_id' => $ids['contact_id'],
       'event_id' => $ids['event_id'],
-      'role_id' => $ids['role_id'],
+      'participant_role_id' => $ids['participant_role_id'],
     ]);
 
     if (!empty($result['status'])) {
@@ -232,6 +232,8 @@ function kavo_civicrm_validateForm($formName, &$fields, &$files, &$form, &$error
     }
 
     // Why o why is role_id an array?
+    // If I'm correct, the field is called 'role_id' for the form, and
+    // 'participant_role_id' for the API.
     $roleId = CRM_Utils_Array::first($fields['role_id']);
     $eventId = $fields['event_id'];
 
@@ -245,7 +247,7 @@ function kavo_civicrm_validateForm($formName, &$fields, &$files, &$form, &$error
     $result = civicrm_api3('Kavo', 'validateparticipant', [
       'contact_id' => $contactId,
       'event_id' => $eventId,
-      'role_id' => $roleId,
+      'participant_role_id' => $roleId,
     ]);
 
     if (!empty($result['values']['status'])) {

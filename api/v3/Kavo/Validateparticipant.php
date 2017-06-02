@@ -38,9 +38,10 @@ function _civicrm_api3_kavo_Validateparticipant_spec(&$spec) {
     'type' => CRM_Utils_Type::T_STRING,
     'api.required' => 0,
   ];
-  $spec['role_id'] = [
+  $spec['participant_role_id'] = [
     'type' => CRM_Utils_Type::T_INT,
     'api.required' => 1,
+    'api.aliases' => ['role_id'],
   ];
 }
 
@@ -68,7 +69,7 @@ function civicrm_api3_kavo_Validateparticipant($params) {
   }
 
   // TODO: handle $params['contact_id'] = ['in' => [/*array*/]].
-  $civiParticipant = $worker->create($params['contact_id'], $params['event_id'], $params['role_id']);
+  $civiParticipant = $worker->create($params['contact_id'], $params['event_id'], $params['participant_role_id']);
   $validationResult = $worker->validateKavo($civiParticipant);
   return civicrm_api3_create_success((array)$validationResult, 'Kavo', 'validateparticipant');
 }

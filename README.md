@@ -75,7 +75,7 @@ you might want to provide a custom template for `templates/CRM/Event/Form/Manage
 There is API support for this:
 
 
-    civicrm_api3('Kavo', 'validateparticipant', ['event_id' => 2, 'contact_id' => 3, 'role_id' => 1]);
+    civicrm_api3('Kavo', 'validateparticipant', ['event_id' => 2, 'contact_id' => 3, 'participant_role_id' => 1]);
     
 This only works if the attendants have participant role 'Attendee'. If your participants
 have a role with a different name, you should configure this in the CiviCRM settings,
@@ -100,7 +100,7 @@ Some examples with drush:
     drush cvapi Kavo.createaccount contact_id=204
     drush cvapi Kavo.createevent event_id=2
     drush cvapi Kavo.gettraject kavo_id=125143-59
-    drush cvapi Kavo.validateparticipant event_id=2 contact_id=3 role_id=1
+    drush cvapi Kavo.validateparticipant event_id=2 contact_id=3 participant_role_id=1
 
 Or in php:
 
@@ -108,7 +108,7 @@ Or in php:
     civicrm_api3('Kavo', 'createaccount', ['contact_id' => 204]);
     civicrm_api3('Kavo', 'createevent', ['event_id' => 2]);
     civicrm_api3('Kavo', 'gettraject', ['kavo_id' => '125143-59']);
-    civicrm_api3('Kavo', 'validateparticipant', ['event_id' => 2, 'contact_id' => 3, 'role_id' => 1]);
+    civicrm_api3('Kavo', 'validateparticipant', ['event_id' => 2, 'contact_id' => 3, 'participant_role_id' => 1]);
 
 Note that it's not always clear when to use `contact_id` and `event_id`, and when to use
 `kavo_id` and `course_id`. This is a bug.
