@@ -112,7 +112,10 @@ class CRM_Kavo_Worker_ParticipantWorker extends CRM_Kavo_Worker {
     return [
       'api.Contact.getsingle' => [
         'id' => '$value.contact_id',
-        'return' => [CRM_Kavo_Field::KAVO_ID()],
+        'return' => [
+          'birth_date',
+          CRM_Kavo_Field::KAVO_ID(),
+        ],
       ],
       'api.Event.getsingle' => [
         'id' => '$value.event_id',
