@@ -52,6 +52,9 @@
                 {if $code == 128}
                     {ts}Participant lacks experience.{/ts}
                 {/if}
+                {if $code == 256}
+                    {ts}the start date of the course has to be at least 2 weeks from now.{/ts}
+                {/if}
                 {if $code == 16384}
                     {ts}KAVO-API: unauthorized.{/ts}
                 {/if}

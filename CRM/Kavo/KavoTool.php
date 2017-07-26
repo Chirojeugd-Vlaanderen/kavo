@@ -86,8 +86,13 @@ class CRM_Kavo_KavoTool implements CRM_Kavo_KavoInterface {
       if ($httpCode == KAVO_HTTP_UNAUTHORIZED) {
         throw new Exception($result->message, CRM_Kavo_Error::UNAUTHORIZED);
       }
-      if ($httpCode == KAVO_HTTP_UNPROCESSABLE_ENTITY && isset($result->errors->email)) {
-        throw new Exception($result->error->email, CRM_Kavo_Error::EMAIL_TAKEN);
+      if ($httpCode == KAVO_HTTP_UNPROCESSABLE_ENTITY ) {
+         if (isset($result->errors->email)){
+            throw new Exception($result->errors->email, CRM_Kavo_Error::EMAIL_TAKEN);
+         }
+         if (isset($result->errors->{'sections.0.start_date'})){
+            throw new Exception($result->errors->{'sections.0.start_date'}[0], CRM_Kavo_Error::START_TO_LATE);
+          }
       }
       throw new Exception("HTTP status code $httpCode.", CRM_Kavo_Error::UNKNOWN);
     }
