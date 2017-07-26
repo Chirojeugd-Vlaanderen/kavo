@@ -107,6 +107,9 @@ class CRM_Kavo_Worker_CourseWorker extends CRM_Kavo_Worker {
    * @return array KAVO course.
    */
   public function mapToKavo(array $civiEntity) {
+    $address = civicrm_api3('Address', 'getsingle', array(
+        'id' => $civiEntity['api.LocBlock.getsingle']['address_id']
+     ) );
     return [
       'target' => $civiEntity[CRM_Kavo_Field::TARGET()],
       'max_participants' => $civiEntity['max_participants'],
@@ -129,11 +132,10 @@ class CRM_Kavo_Worker_CourseWorker extends CRM_Kavo_Worker {
         'responsible_last_name' => $civiEntity['api.Contact.getsingle']['last_name'],
         'responsible_first_name' => $civiEntity['api.Contact.getsingle']['first_name'],
         'responsible_phone' => $civiEntity['api.Contact.getsingle']['phone'],
-        'street' => $civiEntity['api.LocBlock.getsingle']['api.Address.getsingle']['street_name'],
-        'number' => $civiEntity['api.LocBlock.getsingle']['api.Address.getsingle']['street_number'] . ' '
-          . $civiEntity['api.LocBlock.getsingle']['api.Address.getsingle']['street_number_suffix'],
-        'postal_code' => $civiEntity['api.LocBlock.getsingle']['api.Address.getsingle']['postal_code'],
-        'city' => $civiEntity['api.LocBlock.getsingle']['api.Address.getsingle']['city'],
+        'street' => $address['street_name'],
+        'number' => $address['street_number'] . ' ' . ['street_number_suffix'],
+        'postal_code' => $address['postal_code'],
+        'city' => $address['city'],
       ]],
     ];
   }
